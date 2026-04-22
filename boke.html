@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>片片公子的个人博客</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --main-color: #86c8c0;
+            --dark-color: #2d3748;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --text-color: #4a5568;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        nav {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            image-rendering: pixelated;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--main-color);
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero 头部区域 */
+        .hero {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            image-rendering: pixelated;
+            box-shadow: 0 4px 12px rgba(134, 200, 192, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 通用区块 */
+        .section {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--main-color);
+            display: inline-block;
+        }
+
+        /* 文章列表 */
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .article-card h3 {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.8rem;
+        }
+
+        .article-desc {
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        /* 关于我 */
+        .about-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--dark-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--main-color);
+            text-decoration: none;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                background: var(--white);
+                width: 100%;
+                padding: 1rem 2rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAEAAQADAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" alt="片片公子头像">
+                片片公子
+            </div>
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#articles">文章</a></li>
+                <li><a href="#about">关于我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 首页Hero区 -->
+    <section class="hero" id="home">
+        <img class="avatar" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAEAAQADAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" alt="片片公子像素猫头像">
+        <h1>你好，我是片片公子</h1>
+        <p>记录代码、生活与创作的碎碎念，一个热爱技术与故事的普通人。</p>
+    </section>
+
+    <!-- 文章列表区 -->
+    <section class="section" id="articles">
+        <h2 class="section-title">最新文章</h2>
+        <div class="article-list">
+            <!-- 文章1 可直接复制这个区块新增文章 -->
+            <div class="article-card">
+                <h3>我的GitHub Pages个人博客搭建记录</h3>
+                <div class="article-meta">2026年4月 | 技术随笔</div>
+                <p class="article-desc">从零开始，用一个HTML文件搭建属于自己的个人博客，无需服务器，免费托管在GitHub Pages，手机电脑都能访问。</p>
+            </div>
+            <!-- 文章2 -->
+            <div class="article-card">
+                <h3>云端同步小说站开发笔记</h3>
+                <div class="article-meta">2026年4月 | 前端开发</div>
+                <p class="article-desc">纯前端实现的小说写作阅读站，搭配免费云端存储，实现电脑手机数据实时同步，不用写后端代码，不用搭数据库。</p>
+            </div>
+            <!-- 文章3 新增文章复制上面的区块改内容即可 -->
+            <div class="article-card">
+                <h3>像素风头像创作小记</h3>
+                <div class="article-meta">2026年4月 | 日常随笔</div>
+                <p class="article-desc">给自己画了一个像素猫头像，简单的色块和线条，却有不一样的质感，像素风真的太有魅力了。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我区 -->
+    <section class="section" id="about">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-content">
+            <p>嗨，我是片片公子，一个喜欢敲代码、写故事、画像素画的普通人。</p>
+            <br>
+            <p>平时喜欢折腾前端开发，用代码做一些有趣的小项目，也喜欢写点小说和随笔，把生活里的想法和故事记录下来。</p>
+            <br>
+            <p>这个博客用来记录我的技术学习、生活日常和创作内容，欢迎你来和我交流～</p>
+            <br>
+            <p>📮 我的GitHub：<a href="#" target="_blank">点击前往我的主页</a>（把#换成你的GitHub链接即可）</p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 片片公子的个人博客 | 托管于 GitHub Pages</p>
+        <p>头像：原创像素猫</p>
+    </footer>
+
+    <!-- 移动端菜单JS -->
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
