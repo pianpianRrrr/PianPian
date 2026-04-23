@@ -1,319 +1,1038 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>片片公子的个人博客</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>片片公子</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Share+Tech+Mono&display=swap');
 
-        :root {
-            --main-color: #86c8c0;
-            --dark-color: #2d3748;
-            --light-bg: #f8fafc;
-            --white: #ffffff;
-            --text-color: #4a5568;
-        }
+    :root {
+      --bg:        #0b1208;
+      --bg2:       #111e0d;
+      --bg3:       #182a12;
+      --accent:    #4a7c3f;
+      --accent2:   #7ec850;
+      --accent3:   #c8f07a;
+      --gold:      #d4a843;
+      --stone:     #8fa88b;
+      --text:      #ddebd0;
+      --text-dim:  #7a9c6d;
+      --border:    #2a4022;
+      --glow:      rgba(126,200,80,.35);
+      --pixel:     'Share Tech Mono', monospace;
+      --serif:     'ZCOOL XiaoWei', serif;
+    }
 
-        body {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-        /* 导航栏 */
-        nav {
-            background: var(--white);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--serif);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        .nav-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* ===== 像素背景画布 ===== */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      width: 100%;
+      height: 100%;
+    }
 
-        .logo {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    /* ===== 导航 ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,18,8,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        .logo img {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            image-rendering: pixelated;
-        }
+    .nav-logo {
+      font-family: var(--pixel);
+      font-size: .9rem;
+      color: var(--accent2);
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--glow);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .nav-logo .bell { font-size: 1rem; animation: bell-sway 3s ease-in-out infinite; display: inline-block; transform-origin: top center; }
+    @keyframes bell-sway {
+      0%,100% { transform: rotate(0deg); }
+      20%      { transform: rotate(8deg); }
+      40%      { transform: rotate(-6deg); }
+      60%      { transform: rotate(4deg); }
+      80%      { transform: rotate(-3deg); }
+    }
+    .nav-logo span { color: var(--gold); }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--pixel);
+      font-size: .75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color .2s, text-shadow .2s;
+    }
+    .nav-links a:hover { color: var(--accent3); text-shadow: 0 0 8px var(--glow); }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+    /* ===== 主容器 ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
 
-        .nav-links a:hover {
-            color: var(--main-color);
-        }
+    /* ===== 像素钟塔天际线 ===== */
+    .tower-banner {
+      width: 100%;
+      height: 100px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      margin-top: 1.5rem;
+      image-rendering: pixelated;
+    }
+    .tower-banner svg {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
 
-        .menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
+    /* ===== Hero ===== */
+    #hero { padding: 4rem 0 3rem; }
 
-        /* Hero 头部区域 */
-        .hero {
-            max-width: 1000px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      background: rgba(17,30,13,.82);
+      border: 2px solid var(--border);
+      padding: 2.5rem;
+      position: relative;
+      image-rendering: pixelated;
+    }
 
-        .avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            image-rendering: pixelated;
-            box-shadow: 0 4px 12px rgba(134, 200, 192, 0.3);
-        }
+    /* 像素角边框 */
+    .hero-inner::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 2px solid transparent;
+      background:
+        linear-gradient(var(--accent),var(--accent)) top left / 22px 2px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) top left / 2px 22px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) top right / 22px 2px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) top right / 2px 22px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) bottom left / 22px 2px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) bottom left / 2px 22px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) bottom right / 22px 2px no-repeat,
+        linear-gradient(var(--accent),var(--accent)) bottom right / 2px 22px no-repeat;
+      animation: frame-pulse 3s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes frame-pulse {
+      from { filter: drop-shadow(0 0 4px var(--accent)); opacity: .7; }
+      to   { filter: drop-shadow(0 0 12px var(--accent2)); opacity: 1; }
+    }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-        }
+    .avatar-wrap { position: relative; flex-shrink: 0; }
+    .avatar-frame {
+      width: 130px;
+      height: 130px;
+      image-rendering: pixelated;
+    }
+    .avatar-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+      display: block;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 20px rgba(126,200,80,.35);
+    }
+    .status-dot {
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 14px; height: 14px;
+      background: var(--accent3);
+      border: 3px solid var(--bg);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(200,240,122,.7); }
+      50%      { box-shadow: 0 0 0 6px rgba(200,240,122,0); }
+    }
 
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            max-width: 600px;
-            margin: 0 auto;
-        }
+    .hero-info { flex: 1; min-width: 240px; position: relative; }
 
-        /* 通用区块 */
-        .section {
-            max-width: 1000px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
+    .hero-tag {
+      font-family: var(--pixel);
+      font-size: .65rem;
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin-bottom: .8rem;
+    }
 
-        .section-title {
-            font-size: 1.8rem;
-            color: var(--dark-color);
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid var(--main-color);
-            display: inline-block;
-        }
+    .hero-name {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        /* 文章列表 */
-        .article-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+    .hero-bio {
+      color: var(--text-dim);
+      line-height: 1.85;
+      font-size: .95rem;
+      margin-bottom: 1.4rem;
+    }
 
-        .article-card {
-            background: var(--white);
-            padding: 1.5rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tag {
+      font-family: var(--pixel);
+      font-size: .6rem;
+      padding: .3rem .7rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      transition: all .2s;
+      image-rendering: pixelated;
+    }
+    .tag:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(126,200,80,.08); }
 
-        .article-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
+    /* ===== 分割线 ===== */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+      position: relative;
+    }
+    .divider::before {
+      content: attr(data-label);
+      position: absolute;
+      top: -10px; left: 0;
+      font-family: var(--pixel);
+      font-size: .65rem;
+      color: var(--gold);
+      background: var(--bg);
+      padding-right: 1rem;
+      letter-spacing: 3px;
+    }
 
-        .article-card h3 {
-            font-size: 1.3rem;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-        }
+    /* ===== 文章卡片 ===== */
+    #posts { padding: 1rem 0 4rem; }
 
-        .article-meta {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-bottom: 0.8rem;
-        }
+    .section-title {
+      font-family: var(--pixel);
+      font-size: .75rem;
+      color: var(--accent2);
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+    }
+    .section-title::before { content: '⚔ '; color: var(--gold); }
 
-        .article-desc {
-            color: var(--text-color);
-            line-height: 1.7;
-        }
+    .posts-grid { display: grid; gap: 1rem; }
 
-        /* 关于我 */
-        .about-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
+    .post-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .post-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--accent2);
+      transform: scaleY(0);
+      transition: transform .2s;
+    }
+    .post-card:hover { border-color: var(--accent2); transform: translateX(4px); box-shadow: -4px 0 20px rgba(126,200,80,.12); }
+    .post-card:hover::before { transform: scaleY(1); }
 
-        /* 页脚 */
-        footer {
-            background: var(--dark-color);
-            color: var(--white);
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
+    .post-meta { font-family: var(--pixel); font-size: .6rem; color: var(--text-dim); margin-bottom: .6rem; display: flex; gap: 1rem; }
+    .post-category { color: var(--gold); }
+    .post-title { font-size: 1.05rem; color: var(--text); margin-bottom: .5rem; transition: color .2s; }
+    .post-card:hover .post-title { color: var(--accent2); }
+    .post-excerpt { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
+    .post-footer { margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .post-tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .post-tag { font-family: var(--pixel); font-size: .55rem; padding: .15rem .5rem; background: rgba(74,124,63,.15); border: 1px solid rgba(74,124,63,.4); color: var(--accent2); }
+    .read-more { font-family: var(--pixel); font-size: .6rem; color: var(--gold); text-decoration: none; letter-spacing: 1px; transition: text-shadow .2s; }
+    .read-more:hover { text-shadow: 0 0 8px var(--gold); }
 
-        footer a {
-            color: var(--main-color);
-            text-decoration: none;
-        }
+    /* ===== 弹层 ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 3rem 1.5rem;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      max-width: 700px; width: 100%;
+      padding: 2.5rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform .3s;
+      image-rendering: pixelated;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      font-family: var(--pixel); font-size: .75rem;
+      color: var(--text-dim); cursor: pointer;
+      background: none; border: 1px solid var(--border);
+      padding: .3rem .7rem; transition: all .2s;
+    }
+    .modal-close:hover { border-color: var(--accent2); color: var(--accent2); }
+    .modal-meta { font-family: var(--pixel); font-size: .6rem; color: var(--text-dim); margin-bottom: 1rem; }
+    .modal h1 { font-size: 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--accent2), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .modal-body { color: var(--text-dim); line-height: 1.9; font-size: .95rem; }
+    .modal-body h2 { font-size: 1.05rem; color: var(--text); margin: 1.5rem 0 .7rem; }
+    .modal-body p { margin-bottom: 1rem; }
+    .modal-body code { font-family: var(--pixel); font-size: .78rem; background: var(--bg3); border: 1px solid var(--border); padding: .1rem .4rem; color: var(--accent3); }
+    .modal-body pre { background: var(--bg3); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+    .modal-body pre code { background: none; border: none; padding: 0; }
 
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                right: 0;
-                background: var(--white);
-                width: 100%;
-                padding: 1rem 2rem;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.06);
-                gap: 1rem;
-            }
+    /* ===== 关于 ===== */
+    #about { padding: 1rem 0 4rem; }
 
-            .nav-links.active {
-                display: flex;
-            }
+    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .about-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      transition: border-color .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+      transform: scaleX(0);
+      transition: transform .3s;
+    }
+    .about-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(74,124,63,.12); }
+    .about-card:hover::before { transform: scaleX(1); }
+    .about-card-icon { font-size: 1.4rem; margin-bottom: .8rem; }
+    .about-card-title { font-family: var(--pixel); font-size: .65rem; color: var(--gold); letter-spacing: 2px; margin-bottom: .5rem; }
+    .about-card-body { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
 
-            .menu-btn {
-                display: block;
-            }
+    /* ===== 源码 ===== */
+    #source { padding: 1rem 0 6rem; }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
+    .source-window { background: var(--bg2); border: 1px solid var(--border); overflow: hidden; }
+    .source-titlebar { background: var(--bg3); border-bottom: 1px solid var(--border); padding: .6rem 1rem; display: flex; align-items: center; gap: .5rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .source-filename { font-family: var(--pixel); font-size: .65rem; color: var(--text-dim); margin-left: .5rem; }
 
-            .section-title {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    .source-tabs { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .source-tab { font-family: var(--pixel); font-size: .62rem; padding: .6rem 1.2rem; color: var(--text-dim); cursor: pointer; border-right: 1px solid var(--border); white-space: nowrap; transition: background .2s, color .2s; }
+    .source-tab.active { background: var(--bg); color: var(--accent2); border-bottom: 2px solid var(--accent2); margin-bottom: -1px; }
+    .source-tab:hover:not(.active) { background: var(--bg3); color: var(--text); }
+
+    .source-code { display: none; }
+    .source-code.active { display: block; }
+
+    .source-body-wrap { position: relative; }
+    .source-body { padding: 1.5rem; overflow-x: auto; max-height: 480px; overflow-y: auto; }
+    .source-body::-webkit-scrollbar { width: 6px; height: 6px; }
+    .source-body::-webkit-scrollbar-track { background: var(--bg2); }
+    .source-body::-webkit-scrollbar-thumb { background: var(--border); }
+
+    pre.code { font-family: var(--pixel); font-size: .7rem; line-height: 1.7; color: var(--text-dim); white-space: pre; }
+    pre.code .line { display: table-row; }
+    pre.code .line::before { content: counter(line); counter-increment: line; display: table-cell; color: #2a4022; padding-right: 1.5rem; text-align: right; user-select: none; min-width: 2.5rem; }
+
+    .c-tag  { color: #60a5fa; }
+    .c-attr { color: #fbbf24; }
+    .c-val  { color: #4ade80; }
+    .c-com  { color: #475569; font-style: italic; }
+
+    .copy-btn { position: absolute; top: .5rem; right: .5rem; font-family: var(--pixel); font-size: .58rem; padding: .3rem .6rem; background: var(--bg3); border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; transition: all .2s; }
+    .copy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ===== Footer ===== */
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; font-family: var(--pixel); font-size: .62rem; color: var(--text-dim); letter-spacing: 2px; position: relative; z-index: 1; }
+    footer span { color: var(--accent2); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 600px) {
+      .hero-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .hero-name { font-size: 2rem; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAEAAQADAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" alt="片片公子头像">
-                片片公子
-            </div>
-            <button class="menu-btn" id="menuBtn">☰</button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#home">首页</a></li>
-                <li><a href="#articles">文章</a></li>
-                <li><a href="#about">关于我</a></li>
-            </ul>
+
+<!-- 像素背景画布 -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- 导航 -->
+<nav>
+  <div class="nav-logo">
+    <span class="bell">🔔</span>片片公子<span>.blog</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">主页</a></li>
+    <li><a href="#posts">文章</a></li>
+    <li><a href="#about">关于</a></li>
+    <li><a href="#source">源码</a></li>
+  </ul>
+</nav>
+
+<!-- 像素钟塔天际线 -->
+<div class="tower-banner">
+  <svg viewBox="0 0 960 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 用 rect 模拟粗像素方块树木 -->
+    <!-- 左侧森林 -->
+    <g fill="#0f1c0b">
+      <!-- 树1：底层大 -->
+      <rect x="0"   y="58" width="24" height="42"/>
+      <!-- 树冠 (像素方块叠) -->
+      <rect x="0"   y="48" width="24" height="12"/>
+      <rect x="0"   y="36" width="24" height="14"/>
+      <rect x="0"   y="26" width="24" height="12"/>
+      <rect x="2"   y="16" width="20" height="12"/>
+      <rect x="4"   y="8"  width="16" height="10"/>
+      <rect x="6"   y="2"  width="12" height="8"/>
+      <!-- 树2 -->
+      <rect x="30"  y="52" width="20" height="48"/>
+      <rect x="30"  y="40" width="20" height="14"/>
+      <rect x="30"  y="28" width="20" height="14"/>
+      <rect x="32"  y="18" width="16" height="12"/>
+      <rect x="34"  y="10" width="12" height="10"/>
+      <rect x="36"  y="4"  width="8"  height="8"/>
+      <!-- 树3 -->
+      <rect x="56"  y="62" width="18" height="38"/>
+      <rect x="56"  y="50" width="18" height="14"/>
+      <rect x="56"  y="38" width="18" height="14"/>
+      <rect x="58"  y="28" width="14" height="12"/>
+      <rect x="60"  y="20" width="10" height="10"/>
+      <rect x="62"  y="14" width="6"  height="8"/>
+      <!-- 树4 -->
+      <rect x="80"  y="55" width="22" height="45"/>
+      <rect x="80"  y="44" width="22" height="13"/>
+      <rect x="80"  y="32" width="22" height="14"/>
+      <rect x="82"  y="22" width="18" height="12"/>
+      <rect x="84"  y="14" width="14" height="10"/>
+      <rect x="86"  y="6"  width="10" height="10"/>
+      <rect x="88"  y="0"  width="6"  height="8"/>
+      <!-- 树5 -->
+      <rect x="108" y="60" width="20" height="40"/>
+      <rect x="108" y="48" width="20" height="14"/>
+      <rect x="108" y="36" width="20" height="14"/>
+      <rect x="110" y="26" width="16" height="12"/>
+      <rect x="112" y="18" width="12" height="10"/>
+      <rect x="114" y="12" width="8"  height="8"/>
+    </g>
+    <!-- 右侧森林 -->
+    <g fill="#0f1c0b">
+      <rect x="836" y="58" width="24" height="42"/>
+      <rect x="836" y="48" width="24" height="12"/>
+      <rect x="836" y="36" width="24" height="14"/>
+      <rect x="836" y="26" width="24" height="12"/>
+      <rect x="838" y="16" width="20" height="12"/>
+      <rect x="840" y="8"  width="16" height="10"/>
+      <rect x="842" y="2"  width="12" height="8"/>
+      <rect x="860" y="52" width="20" height="48"/>
+      <rect x="860" y="40" width="20" height="14"/>
+      <rect x="860" y="28" width="20" height="14"/>
+      <rect x="862" y="18" width="16" height="12"/>
+      <rect x="864" y="10" width="12" height="10"/>
+      <rect x="866" y="4"  width="8"  height="8"/>
+      <rect x="886" y="62" width="18" height="38"/>
+      <rect x="886" y="50" width="18" height="14"/>
+      <rect x="886" y="38" width="18" height="14"/>
+      <rect x="888" y="28" width="14" height="12"/>
+      <rect x="890" y="20" width="10" height="10"/>
+      <rect x="892" y="14" width="6"  height="8"/>
+      <rect x="908" y="55" width="22" height="45"/>
+      <rect x="908" y="44" width="22" height="13"/>
+      <rect x="908" y="32" width="22" height="14"/>
+      <rect x="910" y="22" width="18" height="12"/>
+      <rect x="912" y="14" width="14" height="10"/>
+      <rect x="914" y="6"  width="10" height="10"/>
+      <rect x="916" y="0"  width="6"  height="8"/>
+      <rect x="932" y="60" width="20" height="40"/>
+      <rect x="932" y="48" width="20" height="14"/>
+      <rect x="932" y="36" width="20" height="14"/>
+      <rect x="934" y="26" width="16" height="12"/>
+      <rect x="936" y="18" width="12" height="10"/>
+      <rect x="938" y="12" width="8"  height="8"/>
+    </g>
+    <!-- 中央大钟塔 -->
+    <g>
+      <!-- 塔身 -->
+      <rect x="440" y="20" width="80" height="80"/>
+      <!-- 塔身腰线 -->
+      <rect x="432" y="48" width="96" height="8" fill="#1a3012"/>
+      <!-- 钟楼平台 -->
+      <rect x="430" y="20" width="100" height="10" fill="#1a3012"/>
+      <!-- 塔身窗 -->
+      <rect x="454" y="62" width="20" height="20" fill="#1a3012"/>
+      <rect x="458" y="66" width="12" height="12" fill="#243d1a"/>
+      <!-- 钟 -->
+      <rect x="462" y="28" width="36" height="18" fill="#d4a843" opacity=".9"/>
+      <rect x="464" y="30" width="4"  height="4"  fill="#b8923a"/>
+      <rect x="470" y="30" width="4"  height="4"  fill="#b8923a"/>
+      <rect x="476" y="30" width="4"  height="4"  fill="#b8923a"/>
+      <rect x="482" y="30" width="4"  height="4"  fill="#b8923a"/>
+      <rect x="462" y="36" width="36" height="4"  fill="#b8923a"/>
+      <!-- 钟塔尖顶 -->
+      <rect x="460" y="6"  width="40" height="16" fill="#0f1c0b"/>
+      <rect x="466" y="0"  width="28" height="8"  fill="#0f1c0b"/>
+      <rect x="472" y="-6" width="16" height="8"  fill="#0f1c0b"/>
+      <!-- 钟塔旗帜 -->
+      <rect x="478" y="-20" width="4"  height="28" fill="#4a7c3f"/>
+      <rect x="482" y="-20" width="18" height="10" fill="#7ec850"/>
+      <rect x="490" y="-20" width="4"  height="10" fill="#5a9c40"/>
+    </g>
+    <!-- 地面 -->
+    <rect x="0" y="96" width="960" height="4" fill="#0f1c0b"/>
+  </svg>
+</div>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="avatar-wrap">
+        <div class="avatar-frame">
+          <img src="avatar.jpg" alt="片片公子头像" />
         </div>
-    </nav>
-
-    <!-- 首页Hero区 -->
-    <section class="hero" id="home">
-        <img class="avatar" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAEAAQADAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" alt="片片公子像素猫头像">
-        <h1>你好，我是片片公子</h1>
-        <p>记录代码、生活与创作的碎碎念，一个热爱技术与故事的普通人。</p>
-    </section>
-
-    <!-- 文章列表区 -->
-    <section class="section" id="articles">
-        <h2 class="section-title">最新文章</h2>
-        <div class="article-list">
-            <!-- 文章1 可直接复制这个区块新增文章 -->
-            <div class="article-card">
-                <h3>我的GitHub Pages个人博客搭建记录</h3>
-                <div class="article-meta">2026年4月 | 技术随笔</div>
-                <p class="article-desc">从零开始，用一个HTML文件搭建属于自己的个人博客，无需服务器，免费托管在GitHub Pages，手机电脑都能访问。</p>
-            </div>
-            <!-- 文章2 -->
-            <div class="article-card">
-                <h3>云端同步小说站开发笔记</h3>
-                <div class="article-meta">2026年4月 | 前端开发</div>
-                <p class="article-desc">纯前端实现的小说写作阅读站，搭配免费云端存储，实现电脑手机数据实时同步，不用写后端代码，不用搭数据库。</p>
-            </div>
-            <!-- 文章3 新增文章复制上面的区块改内容即可 -->
-            <div class="article-card">
-                <h3>像素风头像创作小记</h3>
-                <div class="article-meta">2026年4月 | 日常随笔</div>
-                <p class="article-desc">给自己画了一个像素猫头像，简单的色块和线条，却有不一样的质感，像素风真的太有魅力了。</p>
-            </div>
+        <div class="status-dot" title="在线"></div>
+      </div>
+      <div class="hero-info">
+        <div class="hero-tag">✦ PERSONAL BLOG &nbsp;·&nbsp; 片片公子 ✦</div>
+        <h1 class="hero-name">片片公子</h1>
+        <p class="hero-bio">
+          君子论迹不论心，论心世上无完人。<br>
+          看我博客的是gay！
+        </p>
+        <div class="hero-tags">
+          <span class="tag">豆包专业户</span>
+          <span class="tag">啥也不会</span>
+          <span class="tag">不用问我</span>
+          <span class="tag">片哥</span>
+          <span class="tag">片片公子</span>
+          <span class="tag">夜猫子</span>
+          <span class="tag">片儿</span>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 关于我区 -->
-    <section class="section" id="about">
-        <h2 class="section-title">关于我</h2>
-        <div class="about-content">
-            <p>嗨，我是片片公子，一个喜欢敲代码、写故事、画像素画的普通人。</p>
-            <br>
-            <p>平时喜欢折腾前端开发，用代码做一些有趣的小项目，也喜欢写点小说和随笔，把生活里的想法和故事记录下来。</p>
-            <br>
-            <p>这个博客用来记录我的技术学习、生活日常和创作内容，欢迎你来和我交流～</p>
-            <br>
-            <p>📮 我的GitHub：<a href="#" target="_blank">点击前往我的主页</a>（把#换成你的GitHub链接即可）</p>
+<!-- 文章列表 -->
+<section id="posts">
+  <div class="container">
+    <hr class="divider" data-label="SCROLLS" />
+    <p class="section-title">卷轴文章</p>
+    <div class="posts-grid" id="postsGrid"></div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section id="about">
+  <div class="container">
+    <hr class="divider" data-label="LORE" />
+    <p class="section-title">关于我</p>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-card-icon">🐱</div>
+        <div class="about-card-title">IDENTITY</div>
+        <div class="about-card-body">片片公子。</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">💻</div>
+        <div class="about-card-title">TECH STACK</div>
+        <div class="about-card-body">正在学习HTML / CSS / JavaScript，操作系统、计算机网络与组成原理。</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">📖</div>
+        <div class="about-card-title">INTERESTS</div>
+        <div class="about-card-body">偶尔会整一个新奇小玩意。</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🎯</div>
+        <div class="about-card-title">CURRENT GOAL</div>
+        <div class="about-card-body">还看我的是gay。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 源码展示 -->
+<section id="source">
+  <div class="container">
+    <hr class="divider" data-label="GRIMOIRE" />
+    <p class="section-title">网站源码</p>
+    <div class="source-window">
+      <div class="source-titlebar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="source-filename">pianpian-blog / index.html</span>
+      </div>
+      <div class="source-tabs">
+        <div class="source-tab active" data-tab="html">index.html</div>
+        <div class="source-tab" data-tab="readme">README.md</div>
+      </div>
+      <div class="source-code active" id="tab-html">
+        <div class="source-body-wrap">
+          <button class="copy-btn" onclick="copyCode('html')">[ COPY ]</button>
+          <div class="source-body">
+            <pre class="code" id="code-html"></pre>
+          </div>
         </div>
-    </section>
+      </div>
+      <div class="source-code" id="tab-readme">
+        <div class="source-body-wrap">
+          <button class="copy-btn" onclick="copyCode('readme')">[ COPY ]</button>
+          <div class="source-body">
+            <pre class="code" id="code-readme"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 页脚 -->
-    <footer>
-        <p>© 2026 片片公子的个人博客 | 托管于 GitHub Pages</p>
-        <p>头像：原创像素猫</p>
-    </footer>
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>© 2026 <span>片片公子</span> · 钟塔上的像素猫 · 用代码搭建的中世纪森林</p>
+  </div>
+</footer>
 
-    <!-- 移动端菜单JS -->
-    <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const navLinks = document.getElementById('navLinks');
+<!-- 文章弹层 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalBtn()">[ × CLOSE ]</button>
+    <div class="modal-meta" id="modalMeta"></div>
+    <h1 id="modalTitle"></h1>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+<script>
+/* ========================================================
+   像素方块绘制引擎
+   - 所有元素用方块像素（BLOCK = 6px）拼成
+   - 背景：深夜森林 + 缓慢漂移的像素云 + 月亮
+   - 地面：像素草地 + 粗树干树冠
+   - 萤火虫：比 BLOCK 稍大的发光方块 + 拖尾残影
+   - 前景草：底部飘动的像素草丛
+   ======================================================== */
+(function () {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx    = canvas.getContext('2d');
+  const BLOCK  = 6;   // 像素方块大小
+  let W, H;
+  let tick = 0;       // 全局帧计数器
+  let time = 0;       // 持续时间（秒）
 
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-                navLinks.classList.remove('active');
-            });
-        });
-    </script>
+  // ── 萤火虫 ──────────────────────────────────
+  class Firefly {
+    constructor() { this.reset(); }
+    reset() {
+      this.x  = Math.random() * W;
+      this.y  = H * .18 + Math.random() * H * .65;
+      this.vx = (Math.random() - .5) * .8;
+      this.vy = (Math.random() - .5) * .4;
+      this.a  = Math.random();
+      this.sa = (Math.random() * .015 + .005) * (Math.random() < .5 ? 1 : -1);
+      this.hue = 85 + Math.random() * 55; // 80-135 黄绿
+      this.trail = [];
+    }
+    update() {
+      this.trail.unshift({ x: this.x, y: this.y, a: this.a });
+      if (this.trail.length > 8) this.trail.pop();
+      this.a += this.sa;
+      if (this.a > 1 || this.a < 0) this.sa = -this.sa;
+      this.x += this.vx + Math.sin(time * .6 + this.x * .005) * .3;
+      this.y += this.vy + Math.cos(time * .4 + this.y * .004) * .2;
+      if (this.x < -10) this.x = W + 10;
+      if (this.x > W + 10) this.x = -10;
+      if (this.y < H * .1) this.y = H * .1;
+      if (this.y > H * .9) this.y = H * .9;
+    }
+    draw() {
+      // 残影
+      this.trail.forEach((p, i) => {
+        const alpha = (1 - i / this.trail.length) * p.a * .35;
+        const size  = BLOCK * .8 * (1 - i / this.trail.length * .5);
+        ctx.fillStyle = `hsla(${this.hue},95%,70%,${alpha})`;
+        ctx.fillRect(Math.round(p.x / BLOCK) * BLOCK, Math.round(p.y / BLOCK) * BLOCK, size, size);
+      });
+      // 本体
+      const alpha = Math.max(0, this.a);
+      ctx.fillStyle = `hsla(${this.hue},100%,88%,${alpha})`;
+      ctx.fillRect(Math.round(this.x / BLOCK) * BLOCK, Math.round(this.y / BLOCK) * BLOCK, BLOCK, BLOCK);
+      // 光晕
+      const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, BLOCK * 4);
+      grd.addColorStop(0,   `hsla(${this.hue},100%,80%,${alpha * .6})`);
+      grd.addColorStop(.5,  `hsla(${this.hue},90%,60%,${alpha * .25})`);
+      grd.addColorStop(1,   `hsla(${this.hue},80%,40%,0)`);
+      ctx.fillStyle = grd;
+      ctx.fillRect(Math.round(this.x / BLOCK) * BLOCK - BLOCK * 3, Math.round(this.y / BLOCK) * BLOCK - BLOCK * 3, BLOCK * 7, BLOCK * 7);
+    }
+  }
+
+  // ── 像素云 ──────────────────────────────────
+  class PixelCloud {
+    constructor(x, y, speed) {
+      this.x = x; this.y = y; this.speed = speed;
+      this.pixels = [];
+      const cols = 3 + Math.floor(Math.random() * 4);
+      for (let c = 0; c < cols; c++) {
+        const w = 1 + Math.floor(Math.random() * 3);
+        const h = 1 + Math.floor(Math.random() * 2);
+        for (let dx = 0; dx < w; dx++)
+          for (let dy = 0; dy < h; dy++)
+            this.pixels.push({ dx: c + dx - Math.floor(cols / 2), dy: dy - Math.floor(h / 2), a: .5 + Math.random() * .5 });
+      }
+    }
+    update() { this.x += this.speed; if (this.x > W + BLOCK * 10) this.x = -BLOCK * 10; }
+    draw() {
+      this.pixels.forEach(p => {
+        const alpha = p.a * .4;
+        const px = Math.round((this.x + p.dx * BLOCK) / BLOCK) * BLOCK;
+        const py = Math.round((this.y + p.dy * BLOCK) / BLOCK) * BLOCK;
+        ctx.fillStyle = `rgba(140,200,110,${alpha})`;
+        ctx.fillRect(px, py, BLOCK, BLOCK);
+      });
+    }
+  }
+
+  // ── 像素树木（分左右两块画）───────────────
+  // 画一棵树：从树干底部 (bx, by) 开始，向上画 BLOCK 方块
+  function drawPixelTree(bx, by, treeH) {
+    // 树干
+    const trunkW = BLOCK * 2;
+    const trunkH = BLOCK * 3;
+    ctx.fillStyle = '#1a0d04';
+    for (let dy = 0; dy < trunkH; dy += BLOCK)
+      ctx.fillRect(bx, by - dy, trunkW, BLOCK);
+
+    // 树冠：三层叠起来的像素块
+    const layers = [
+      { w: BLOCK * 5, h: BLOCK * 4, top: BLOCK * 4  },
+      { w: BLOCK * 7, h: BLOCK * 5, top: BLOCK * 8  },
+      { w: BLOCK * 9, h: BLOCK * 6, top: BLOCK * 13 },
+    ];
+    const dark = ['#0d1a0b', '#142412', '#1a3012'];
+    layers.forEach((l, i) => {
+      const cols = l.w / BLOCK;
+      const rows = l.h / BLOCK;
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          // 边缘留白一圈，内部填充
+          if (c === 0 || c === cols - 1 || r === rows - 1) {
+            ctx.fillStyle = dark[i];
+            ctx.fillRect(bx + (c - cols / 2) * BLOCK + BLOCK, by - l.top - r * BLOCK, BLOCK, BLOCK);
+          }
+        }
+      }
+    });
+  }
+
+  // ── 像素草丛（飘动）─────────────────────
+  function drawPixelGrass(baseY) {
+    const grassH = BLOCK * 3;
+    ctx.fillStyle = '#0d1a0b';
+    for (let gx = 0; gx < W; gx += BLOCK * 2) {
+      const offset = Math.sin(time * 1.2 + gx * .03) * BLOCK * .8;
+      const grassBot = baseY - offset;
+      ctx.fillRect(gx, grassBot - grassH, BLOCK, grassH);
+    }
+    // 高亮叶尖
+    ctx.fillStyle = '#1a3012';
+    for (let gx = BLOCK; gx < W; gx += BLOCK * 3) {
+      const offset = Math.sin(time * 1.2 + gx * .03) * BLOCK;
+      ctx.fillRect(gx, grassBot - grassH - offset - BLOCK, BLOCK, BLOCK);
+    }
+  }
+
+  // ── 月亮 ──────────────────────────────────
+  function drawMoon() {
+    const mx = W * .78, my = H * .1;
+    const moonBlock = Math.round(20 / BLOCK) * BLOCK; // ~120px 直径
+
+    // 外发光
+    const grd = ctx.createRadialGradient(mx, my, moonBlock / 2, mx, my, moonBlock * 2);
+    grd.addColorStop(0,   'rgba(200,240,150,.22)');
+    grd.addColorStop(.5,  'rgba(140,200,100,.08)');
+    grd.addColorStop(1,   'transparent');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(mx, my, moonBlock * 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 月亮本体（像素方块拼）
+    const r = moonBlock / 2;
+    for (let dx = -r; dx < r; dx += BLOCK) {
+      for (let dy = -r; dy < r; dy += BLOCK) {
+        if (dx * dx + dy * dy < r * r) {
+          // 边缘像素稍暗
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const alpha = dist > r * .7 ? .7 : 1;
+          ctx.fillStyle = `rgba(200,238,160,${alpha})`;
+          ctx.fillRect(Math.round((mx + dx) / BLOCK) * BLOCK, Math.round((my + dy) / BLOCK) * BLOCK, BLOCK, BLOCK);
+        }
+      }
+    }
+  }
+
+  // ── 主循环 ──────────────────────────────
+  let fireflies = [];
+  let clouds    = [];
+
+  function init() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+
+    fireflies = Array.from({ length: 45 }, () => new Firefly());
+    clouds    = Array.from({ length: 6  }, (_, i) => {
+      const speeds = [.12, .2, .18, .15, .22, .1];
+      return new PixelCloud(Math.random() * W, H * (.05 + Math.random() * .12), speeds[i]);
+    });
+  }
+
+  let lastTS = 0;
+  function loop(ts) {
+    const dt = Math.min((ts - lastTS) / 1000, .05);
+    lastTS = ts;
+    time += dt;
+    tick++;
+
+    // ── 清空 + 天空渐变 ──
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0,    '#040b03');
+    sky.addColorStop(0.4,  '#060f05');
+    sky.addColorStop(0.72, '#091508');
+    sky.addColorStop(1,    '#0c1e0a');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── 像素云漂移 ──
+    clouds.forEach(c => { c.update(); c.draw(); });
+
+    // ── 月亮 ──
+    drawMoon();
+
+    // ── 远景树木（像素块拼）───
+    const groundY = H * .9;
+    const treeData = [
+      { bx: 30,  h: 120 }, { bx: 90,  h: 160 }, { bx: 160, h: 130 },
+      { bx: 230, h: 180 }, { bx: 310, h: 140 }, { bx: 390, h: 200 },
+      { bx: 680, h: 200 }, { bx: 760, h: 140 }, { bx: 840, h: 180 },
+      { bx: 910, h: 130 }, { bx: 970, h: 160 }, { bx: 1040,h: 120 },
+    ];
+    // 只画远景小树
+    ctx.save();
+    ctx.globalAlpha = .35;
+    treeData.forEach(t => {
+      const scale = .55;
+      const scaledH = t.h * scale;
+      drawPixelTree(t.bx, groundY, scaledH);
+    });
+    ctx.restore();
+
+    // ── 近景大树木（每帧更新飘动偏移）───
+    const nearTrees = [
+      { bx: 60,  h: 260 },
+      { bx: 250, h: 300 },
+      { bx: 580, h: 320 },
+      { bx: 820, h: 280 },
+      { bx: 1050,h: 260 },
+    ];
+    nearTrees.forEach(t => {
+      const sway = Math.sin(time * .5 + t.bx * .01) * BLOCK;
+      ctx.save();
+      ctx.translate(sway, 0);
+      drawPixelTree(t.bx, groundY, t.h);
+      ctx.restore();
+    });
+
+    // ── 地面 ──
+    const groundGrad = ctx.createLinearGradient(0, groundY - BLOCK * 5, 0, H);
+    groundGrad.addColorStop(0, '#0d2010');
+    groundGrad.addColorStop(.4, '#091508');
+    groundGrad.addColorStop(1, '#040b03');
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, groundY - BLOCK * 3, W, H - groundY + BLOCK * 3);
+
+    // ── 像素草丛（飘动）───
+    drawPixelGrass(groundY);
+
+    // ── 萤火虫 ──
+    if (tick % 2 === 0) // 每2帧更新一次萤火虫（省性能）
+      fireflies.forEach(f => f.update());
+    fireflies.forEach(f => f.draw());
+
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => { init(); });
+  init();
+  requestAnimationFrame(loop);
+})();
+
+/* ===== 文章数据（只保留一篇） ===== */
+const posts = [
+  {
+    id: 1,
+    title: '简历',
+    date: '2026-04-23',
+    category: '技术',
+    tags: ['前端', '博客',],
+    excerpt: '片儿',
+    content: `
+      <h2>缘起</h2>
+      <p>现学的。</p>
+      <p>如果问我具体怎么做的，我不会，我只会对着教程代码一个个带入</p>
+      <h2>我大多数代码都不会敲。</h2>
+      <p>但我会怎么做。</p>
+      <p>把它扔到 GitHub Pages，完事。</p>
+      <h2>像素风格的选择</h2>
+      <p>源自2023年的Ai绘画，看对眼一个ai小猫，后来用绘图软件画了一个相同姿势的像素小猫</p>
+      <p>这就是属于我的地方。</p>
+      <h2>总结</h2>
+      <p>技术选型没有对错，只有合不合适。个人博客，能跑能看能写，就够了。</p>
+    `
+  }
+];
+
+/* ===== 渲染卡片 ===== */
+function renderPosts() {
+  const grid = document.getElementById('postsGrid');
+  grid.innerHTML = posts.map(p => `
+    <div class="post-card" onclick="openPost(${p.id})">
+      <div class="post-meta">
+        <span>${p.date}</span>
+        <span class="post-category">✦ ${p.category}</span>
+      </div>
+      <div class="post-title">${p.title}</div>
+      <div class="post-excerpt">${p.excerpt}</div>
+      <div class="post-footer">
+        <div class="post-tags">
+          ${p.tags.map(t => `<span class="post-tag">${t}</span>`).join('')}
+        </div>
+        <a class="read-more" href="#">READ MORE →</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===== 弹层 ===== */
+function openPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modalMeta').textContent = `${p.date}  ·  ${p.category}`;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalBody').innerHTML = p.content;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModalBtn() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+
+/* ===== 源码 Tab ===== */
+document.querySelectorAll('.source-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.source-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.source-code').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ===== 复制 ===== */
+function copyCode(type) {
+  const text = type === 'html' ? document.documentElement.outerHTML : readmeContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '[ COPIED! ]';
+    btn.style.color = 'var(--accent2)';
+    btn.style.borderColor = 'var(--accent2)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
+  });
+}
+
+const readmeContent = `# 片片公子的个人博客
+## License
+MIT © 片片公子 2026`;
+
+/* ===== 完整源码（用于源码展示区） ===== */
+const fullSourceCode = document.documentElement.outerHTML;
+
+/* ===== 源码代码展示 ===== */
+function renderCode(preId, code) {
+  const pre = document.getElementById(preId);
+  if (!pre) return;
+  pre.innerHTML = code.split('\n')
+    .map(line => `<span class="line">${line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') || ' '}</span>`)
+    .join('\n');
+}
+
+/* ===== 初始化 ===== */
+renderPosts();
+renderCode('code-html', fullSourceCode);
+renderCode('code-readme', readmeContent);
+</script>
 </body>
 </html>
