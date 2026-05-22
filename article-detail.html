@@ -4,9 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="个人技术博客，分享学习笔记、生活感悟">
-  <meta name="keywords" content="个人博客,学习笔记,技术分享">
-  <title>片片公子</title>
+  <title>文章详情 - 片片公子</title>
   <style>
     /* ========== 全局样式重置 ========== */
     * {
@@ -15,7 +13,7 @@
       box-sizing: border-box;
     }
 
-    /* ========== 底部滚动文字（暗黑主题适配） ========== */
+    /* ========== 底部滚动文字 ========== */
     .text-carousel {
       width: 100%;
       overflow: hidden;
@@ -66,13 +64,12 @@
 
     .blog-title,
     .nav-link,
-    .article-title,
-    .widget-title {
+    .article-detail h2 {
       font-family: "Inter", "HarmonyOS Sans SC", "Noto Sans SC", sans-serif;
       font-weight: 600;
     }
 
-    /* ========== 暗沉系飘动云朵 ========== */
+    /* ========== 顶部飘动云朵 ========== */
     .clouds {
       position: fixed;
       top: 0;
@@ -129,8 +126,7 @@
     /* ========== 链接与交互 ========== */
     a,
     button,
-    .nav-link,
-    .read-more {
+    .nav-link {
       cursor: url("ShuBiao32.png"), auto !important;
     }
 
@@ -184,7 +180,7 @@
       }
     }
 
-    /* ========== 容器 ========== */
+    /* ========== 通用容器 ========== */
     .container {
       width: 90%;
       max-width: 1200px;
@@ -192,25 +188,19 @@
       padding: 0 15px;
     }
 
-    /* ========== 头部 ========== */
+    /* ========== 头部样式 ========== */
     .blog-header {
       background-color: #1e1e1e;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
       padding: 20px 0;
       margin-bottom: 30px;
+      text-align: center;
     }
 
     .blog-title {
       font-size: 28px;
       font-weight: bold;
-      text-align: center;
       color: #8ca3c7;
-    }
-
-    .blog-subtitle {
-      text-align: center;
-      color: #888;
-      margin-top: 5px;
     }
 
     /* ========== 导航栏 ========== */
@@ -238,85 +228,33 @@
       color: #b0c4de;
     }
 
-    /* ========== 主体 ========== */
-    .blog-main {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
-
-    .articles {
-      flex: 3;
-      min-width: 300px;
-    }
-
-    .article-card {
+    /* ========== 文章详情区域 ========== */
+    .article-detail {
       background-color: #1e1e1e;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      padding: 25px;
+      padding: 30px;
       margin-bottom: 30px;
-      transition: transform 0.3s;
     }
 
-    .article-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .article-title {
-      font-size: 24px;
-      margin-bottom: 10px;
+    .article-detail h2 {
+      font-size: 28px;
       color: #8ca3c7;
+      margin-bottom: 15px;
     }
 
     .article-meta {
       color: #777;
       font-size: 14px;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
     }
 
-    .article-excerpt {
+    .article-content {
       color: #b0b0b0;
-      margin-bottom: 20px;
-    }
-
-    .read-more {
-      display: inline-block;
-      padding: 8px 15px;
-      background-color: #253f70;
-      color: #e0e0e0;
-      border-radius: 4px;
-    }
-
-    .read-more:hover {
-      background-color: #324f8a;
-    }
-
-    /* 侧边栏 */
-    .sidebar {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .widget {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      padding: 20px;
-      margin-bottom: 30px;
-    }
-
-    .widget-title {
-      font-size: 18px;
-      color: #8ca3c7;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #253f70;
-      margin-bottom: 15px;
-    }
-
-    .widget-list li {
-      padding: 8px 0;
-      border-bottom: 1px dashed #333;
+      font-size: 16px;
+      line-height: 1.8;
     }
 
     /* ========== 页脚 ========== */
@@ -328,7 +266,7 @@
       margin-top: 0;
     }
 
-    /* ========== 移动端 ========== */
+    /* ========== 响应式适配 ========== */
     @media (max-width: 768px) {
       .blog-title {
         font-size: 24px;
@@ -338,26 +276,26 @@
         padding: 10px 15px;
       }
 
-      .article-title {
-        font-size: 20px;
+      .article-detail h2 {
+        font-size: 24px;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- 顶部云朵 -->
   <div class="clouds">
     <div class="cloud cloud1"></div>
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
   </div>
 
-  <!-- 博客头部 -->
+  <!-- 头部 -->
   <header class="blog-header">
     <div class="container">
       <img src="avatar.jpg" alt="头像" class="avatar">
       <h1 class="blog-title">片片公子</h1>
-      <p class="blog-subtitle">记录 · 分享 · 沉淀</p>
     </div>
   </header>
 
@@ -365,7 +303,7 @@
   <nav class="blog-nav">
     <div class="container">
       <ul class="nav-list">
-        <li class="nav-item"><a href="#" class="nav-link">首页</a></li>
+        <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
         <li class="nav-item"><a href="#" class="nav-link">文章</a></li>
         <li class="nav-item"><a href="#" class="nav-link">分类</a></li>
         <li class="nav-item"><a href="#" class="nav-link">关于我</a></li>
@@ -374,55 +312,30 @@
     </div>
   </nav>
 
-  <!-- 主体内容 -->
-  <main class="container blog-main">
-    <section class="articles">
-      <article class="article-card">
-        <h2 class="article-title">我的世界服务器</h2>
-        <div class="article-meta">————————</div>
-        <p class="article-excerpt">————————</p>
-        <a href="article-detail.html" class="read-more" target="_blank" rel="noopener noreferrer">打开</a>
-      </article>
-    </section>
-
-    <aside class="sidebar">
-      <div class="widget">
-        <h3 class="widget-title">个人简介</h3>
-        <p>一个学生</p>
+  <!-- 文章详情内容 -->
+  <main class="container">
+    <div class="article-detail">
+      <h2>文章标题（待修改）</h2>
+      <div class="article-meta">发布时间：2025-01-01 | 分类：前端开发</div>
+      <div class="article-content">
+        <p>待填写</p>
       </div>
-      <div class="widget">
-        <h3 class="widget-title">文章分类</h3>
-        <ul class="widget-list">
-          <li><a href="#">开发</a></li>
-          <li><a href="#">笔记</a></li>
-          <li><a href="#">感悟</a></li>
-        </ul>
-      </div>
-      <div class="widget">
-        <h3 class="widget-title">——————</h3>
-        <ul class="widget-list">
-          <li><a href="#">————</a></li>
-          <li><a href="#">————</a></li>
-          <li><a href="#">————</a></li>
-        </ul>
-      </div>
-    </aside>
+    </div>
   </main>
 
-  <!-- ========== 滚动文字（页面底部） ========== -->
+  <!-- 底部滚动文字 -->
   <div class="text-carousel">
     <div class="carousel-track">
       <div class="carousel-item">片片公子</div>
+      <div class="carousel-item">记录生活</div>
+      <div class="carousel-item">分享技术</div>
+      <div class="carousel-item">沉淀成长</div>
+      <div class="carousel-item">欢迎来访</div>
       <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <!-- 重复文字实现无缝滚动 -->
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
+      <div class="carousel-item">记录生活</div>
+      <div class="carousel-item">分享技术</div>
+      <div class="carousel-item">沉淀成长</div>
+      <div class="carousel-item">欢迎来访</div>
     </div>
   </div>
 
