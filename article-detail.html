@@ -1,329 +1,108 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>文章详情 - 片片公子</title>
-  <style>
-    /* ========== 全局样式重置 ========== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* ========== 底部滚动文字 ========== */
-    .text-carousel {
-      width: 100%;
-      overflow: hidden;
-      background-color: #1a1a1a;
-      padding: 15px 0;
-      margin: 0;
-    }
-
-    .carousel-track {
-      display: flex;
-      gap: 30px;
-      animation: scroll 25s linear infinite;
-      white-space: nowrap;
-    }
-
-    .text-carousel:hover .carousel-track {
-      animation-play-state: paused;
-    }
-
-    .carousel-item {
-      padding: 10px 25px;
-      background-color: #253f70;
-      border-radius: 30px;
-      font-size: 14px;
-      color: #e0e0e0;
-    }
-
-    @keyframes scroll {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    /* ========== 深灰背景 + 暗沉蓝主题 ========== */
-    body {
-      font-family: "Inter", "HarmonyOS Sans SC", "Noto Sans SC", sans-serif;
-      font-weight: 400;
-      line-height: 1.6;
-      color: #d0d0d0;
-      background-color: #121212;
-      min-height: 100vh;
-      cursor: url("ShuBiao32.png"), auto;
-    }
-
-    .blog-title,
-    .nav-link,
-    .article-detail h2 {
-      font-family: "Inter", "HarmonyOS Sans SC", "Noto Sans SC", sans-serif;
-      font-weight: 600;
-    }
-
-    /* ========== 顶部飘动云朵 ========== */
-    .clouds {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      z-index: 999;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .cloud {
-      position: absolute;
-      border-radius: 50px;
-      opacity: 0.7;
-    }
-
-    .cloud1 {
-      width: 70px;
-      height: 25px;
-      top: 8px;
-      background: #0a2463;
-      animation: cloudMove 22s linear infinite;
-    }
-
-    .cloud2 {
-      width: 90px;
-      height: 30px;
-      top: 20px;
-      background: #253f70;
-      animation: cloudMove 30s linear infinite;
-      animation-delay: -5s;
-    }
-
-    .cloud3 {
-      width: 50px;
-      height: 20px;
-      top: 5px;
-      background: #1a3664;
-      animation: cloudMove 18s linear infinite;
-      animation-delay: -10s;
-    }
-
-    @keyframes cloudMove {
-      0% {
-        transform: translateX(-100px);
-      }
-
-      100% {
-        transform: translateX(100vw);
-      }
-    }
-
-    /* ========== 链接与交互 ========== */
-    a,
-    button,
-    .nav-link {
-      cursor: url("ShuBiao32.png"), auto !important;
-    }
-
-    a {
-      text-decoration: none;
-      color: #8ca3c7;
-      transition: color 0.3s;
-    }
-
-    a:hover {
-      color: #b0c4de;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* ========== 头像 ========== */
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #253f70;
-      object-fit: cover;
-      margin: 0 auto 15px;
-      display: block;
-      animation: float 3s infinite ease-in-out;
-      transition: transform .3s;
-    }
-
-    .avatar:hover {
-      transform: scale(1.1);
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-8px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    /* ========== 通用容器 ========== */
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-
-    /* ========== 头部样式 ========== */
-    .blog-header {
-      background-color: #1e1e1e;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      padding: 20px 0;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .blog-title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #8ca3c7;
-    }
-
-    /* ========== 导航栏 ========== */
-    .blog-nav {
-      background-color: #0a2463;
-      margin-bottom: 30px;
-    }
-
-    .nav-list {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .nav-item {
-      padding: 15px 25px;
-    }
-
-    .nav-link {
-      color: #d0d0d0;
-      font-size: 16px;
-    }
-
-    .nav-link:hover {
-      color: #b0c4de;
-    }
-
-    /* ========== 文章详情区域 ========== */
-    .article-detail {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      padding: 30px;
-      margin-bottom: 30px;
-    }
-
-    .article-detail h2 {
-      font-size: 28px;
-      color: #8ca3c7;
-      margin-bottom: 15px;
-    }
-
-    .article-meta {
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #333;
-    }
-
-    .article-content {
-      color: #b0b0b0;
-      font-size: 16px;
-      line-height: 1.8;
-    }
-
-    /* ========== 页脚 ========== */
-    .blog-footer {
-      background-color: #0a2463;
-      color: #b0b0b0;
-      text-align: center;
-      padding: 30px 0;
-      margin-top: 0;
-    }
-
-    /* ========== 响应式适配 ========== */
-    @media (max-width: 768px) {
-      .blog-title {
-        font-size: 24px;
-      }
-
-      .nav-item {
-        padding: 10px 15px;
-      }
-
-      .article-detail h2 {
-        font-size: 24px;
-      }
-    }
-  </style>
+  <meta name="description" content="片片公子的文章 — 技术分享与学习笔记">
+  <meta name="keywords" content="技术文章,博客,学习笔记">
+  <title>古老卷轴 - 片片公子</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body data-page="article">
 
-<body>
-  <!-- 顶部云朵 -->
+  <!-- 林间雾气 -->
   <div class="clouds">
     <div class="cloud cloud1"></div>
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
   </div>
 
+  <!-- 精灵光点 -->
+  <div class="fireflies" id="fireflies"></div>
+
+  <!-- 翡翠光脉进度条 -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- 精灵符文石 -->
+  <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">O+</button>
+
+  <!-- 光羽 -->
+  <button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">^^</button>
+
   <!-- 头部 -->
   <header class="blog-header">
     <div class="container">
-      <img src="avatar.jpg" alt="头像" class="avatar">
+      <!-- 世界树 -->
+      <div class="world-tree">
+        <div class="tree-sparkles">
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+        </div>
+        <div class="tree-canopy canopy-3"></div>
+        <div class="tree-canopy canopy-2"></div>
+        <div class="tree-canopy canopy-1"></div>
+        <div class="tree-trunk"></div>
+        <div class="tree-roots"></div>
+      </div>
+      <img src="avatar.jpg" alt="纹章" class="avatar">
       <h1 class="blog-title">片片公子</h1>
     </div>
   </header>
 
-  <!-- 导航栏 -->
+  <!-- 古木枝廊导航 -->
   <nav class="blog-nav">
     <div class="container">
-      <ul class="nav-list">
-        <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">文章</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">分类</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">关于我</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">联系我</a></li>
+      <button class="hamburger" id="hamburger" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-list" id="navList">
+        <li class="nav-item"><a href="index.html" class="nav-link" data-page="home">[ 精灵之庭 ]</a></li>
+        <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link active" data-page="article">[ 知识古树 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="contact">[ 风之信使 ]</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- 文章详情内容 -->
+  <!-- 古老卷轴 -->
   <main class="container">
+    <div id="tocContainer"></div>
+
     <div class="article-detail">
-      <h2>文章标题（待修改）</h2>
-      <div class="article-meta">发布时间：2025-01-01 | 分类：前端开发</div>
-      <div class="article-content">
-        <p>待填写</p>
-      </div>
+      <h1 id="articleDetailTitle">LOADING...</h1>
+      <div class="meta" id="articleDetailMeta"></div>
+      <div class="article-content" id="articleContent"></div>
     </div>
+
+    <nav class="article-nav">
+      <a href="#" id="prevArticle" class="prev">
+        <span class="nav-label">&lt;&lt; 上一卷轴</span>
+        <span class="nav-title"></span>
+      </a>
+      <a href="#" id="nextArticle" class="next">
+        <span class="nav-label">下一卷轴 &gt;&gt;</span>
+        <span class="nav-title"></span>
+      </a>
+    </nav>
+
+    <section class="comments-section">
+      <h2 class="comments-title">[ 精灵议事厅 ]</h2>
+
+      <form class="comment-form" id="commentForm">
+        <div class="form-row">
+          <input type="text" id="commentAuthor" placeholder="旅人，请留下你的名字" maxlength="30" autocomplete="off">
+        </div>
+        <textarea id="commentBody" placeholder="在此留下你的思绪..." maxlength="500"></textarea>
+        <button type="submit" class="comment-submit">[ 刻入翠叶 ]</button>
+      </form>
+
+      <div class="comment-list" id="commentList"></div>
+    </section>
   </main>
 
-  <!-- 底部滚动文字 -->
   <div class="text-carousel">
     <div class="carousel-track">
       <div class="carousel-item">片片公子</div>
@@ -339,12 +118,30 @@
     </div>
   </div>
 
-  <!-- 页脚 -->
   <footer class="blog-footer">
     <div class="container">
-      <p>&copy; 主要为AI生成</p>
+      <div class="footer-social">
+        <a href="#" title="GitHub" aria-label="GitHub">GH</a>
+        <a href="#" title="邮箱" aria-label="邮箱">@</a>
+        <a href="#" title="RSS" aria-label="RSS">RS</a>
+      </div>
+      <p class="footer-copy">(c) 2025 PianPian :: 在翠叶间，静听代码低语</p>
     </div>
   </footer>
-</body>
 
+  <script src="script.js"></script>
+  <script>
+    (function() {
+      var container = document.getElementById('fireflies');
+      if (!container) return;
+      var html = '';
+      for (var i = 0; i < 18; i++) {
+        html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
+          (Math.random()*90).toFixed(1) + '%;--dur:' + (2.5+Math.random()*4).toFixed(1) +
+          's;--delay:' + (Math.random()*5).toFixed(1) + 's;"></div>';
+      }
+      container.innerHTML = html;
+    })();
+  </script>
+</body>
 </html>

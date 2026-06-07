@@ -1,437 +1,158 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="个人技术博客，分享学习笔记、生活感悟">
-  <meta name="keywords" content="个人博客,学习笔记,技术分享">
+  <meta name="description" content="片片公子的个人博客 — 记录技术学习、开发笔记与生活感悟">
+  <meta name="keywords" content="个人博客,技术分享,学习笔记,前端开发">
   <title>片片公子</title>
-  <style>
-    /* ========== 全局样式重置 ========== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* ========== 底部滚动文字（暗黑主题适配） ========== */
-    .text-carousel {
-      width: 100%;
-      overflow: hidden;
-      background-color: #1a1a1a;
-      padding: 15px 0;
-      margin: 0;
-    }
-
-    .carousel-track {
-      display: flex;
-      gap: 30px;
-      animation: scroll 25s linear infinite;
-      white-space: nowrap;
-    }
-
-    .text-carousel:hover .carousel-track {
-      animation-play-state: paused;
-    }
-
-    .carousel-item {
-      padding: 10px 25px;
-      background-color: #253f70;
-      border-radius: 30px;
-      font-size: 14px;
-      color: #e0e0e0;
-    }
-
-    @keyframes scroll {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    /* ========== 深灰背景 + 暗沉蓝主题 ========== */
-    body {
-      font-family: "Inter", "HarmonyOS Sans SC", "Noto Sans SC", sans-serif;
-      font-weight: 400;
-      line-height: 1.6;
-      color: #d0d0d0;
-      background-color: #121212;
-      min-height: 100vh;
-      cursor: url("ShuBiao32.png"), auto;
-    }
-
-    .blog-title,
-    .nav-link,
-    .article-title,
-    .widget-title {
-      font-family: "Inter", "HarmonyOS Sans SC", "Noto Sans SC", sans-serif;
-      font-weight: 600;
-    }
-
-    /* ========== 暗沉系飘动云朵 ========== */
-    .clouds {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      z-index: 999;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .cloud {
-      position: absolute;
-      border-radius: 50px;
-      opacity: 0.7;
-    }
-
-    .cloud1 {
-      width: 70px;
-      height: 25px;
-      top: 8px;
-      background: #0a2463;
-      animation: cloudMove 22s linear infinite;
-    }
-
-    .cloud2 {
-      width: 90px;
-      height: 30px;
-      top: 20px;
-      background: #253f70;
-      animation: cloudMove 30s linear infinite;
-      animation-delay: -5s;
-    }
-
-    .cloud3 {
-      width: 50px;
-      height: 20px;
-      top: 5px;
-      background: #1a3664;
-      animation: cloudMove 18s linear infinite;
-      animation-delay: -10s;
-    }
-
-    @keyframes cloudMove {
-      0% {
-        transform: translateX(-100px);
-      }
-
-      100% {
-        transform: translateX(100vw);
-      }
-    }
-
-    /* ========== 链接与交互 ========== */
-    a,
-    button,
-    .nav-link,
-    .read-more {
-      cursor: url("ShuBiao32.png"), auto !important;
-    }
-
-    a {
-      text-decoration: none;
-      color: #8ca3c7;
-      transition: color 0.3s;
-    }
-
-    a:hover {
-      color: #b0c4de;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* ========== 头像 ========== */
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #253f70;
-      object-fit: cover;
-      margin: 0 auto 15px;
-      display: block;
-      animation: float 3s infinite ease-in-out;
-      transition: transform .3s;
-    }
-
-    .avatar:hover {
-      transform: scale(1.1);
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-8px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    /* ========== 容器 ========== */
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-
-    /* ========== 头部 ========== */
-    .blog-header {
-      background-color: #1e1e1e;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      padding: 20px 0;
-      margin-bottom: 30px;
-    }
-
-    .blog-title {
-      font-size: 28px;
-      font-weight: bold;
-      text-align: center;
-      color: #8ca3c7;
-    }
-
-    .blog-subtitle {
-      text-align: center;
-      color: #888;
-      margin-top: 5px;
-    }
-
-    /* ========== 导航栏 ========== */
-    .blog-nav {
-      background-color: #0a2463;
-      margin-bottom: 30px;
-    }
-
-    .nav-list {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .nav-item {
-      padding: 15px 25px;
-    }
-
-    .nav-link {
-      color: #d0d0d0;
-      font-size: 16px;
-    }
-
-    .nav-link:hover {
-      color: #b0c4de;
-    }
-
-    /* ========== 主体 ========== */
-    .blog-main {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
-
-    .articles {
-      flex: 3;
-      min-width: 300px;
-    }
-
-    .article-card {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      padding: 25px;
-      margin-bottom: 30px;
-      transition: transform 0.3s;
-    }
-
-    .article-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .article-title {
-      font-size: 24px;
-      margin-bottom: 10px;
-      color: #8ca3c7;
-    }
-
-    .article-meta {
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
-
-    .article-excerpt {
-      color: #b0b0b0;
-      margin-bottom: 20px;
-    }
-
-    .read-more {
-      display: inline-block;
-      padding: 8px 15px;
-      background-color: #253f70;
-      color: #e0e0e0;
-      border-radius: 4px;
-    }
-
-    .read-more:hover {
-      background-color: #324f8a;
-    }
-
-    /* 侧边栏 */
-    .sidebar {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .widget {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      padding: 20px;
-      margin-bottom: 30px;
-    }
-
-    .widget-title {
-      font-size: 18px;
-      color: #8ca3c7;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #253f70;
-      margin-bottom: 15px;
-    }
-
-    .widget-list li {
-      padding: 8px 0;
-      border-bottom: 1px dashed #333;
-    }
-
-    /* ========== 页脚 ========== */
-    .blog-footer {
-      background-color: #0a2463;
-      color: #b0b0b0;
-      text-align: center;
-      padding: 30px 0;
-      margin-top: 0;
-    }
-
-    /* ========== 移动端 ========== */
-    @media (max-width: 768px) {
-      .blog-title {
-        font-size: 24px;
-      }
-
-      .nav-item {
-        padding: 10px 15px;
-      }
-
-      .article-title {
-        font-size: 20px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body data-page="home">
 
-<body>
+  <!-- 林间雾气 -->
   <div class="clouds">
     <div class="cloud cloud1"></div>
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
   </div>
 
-  <!-- 博客头部 -->
+  <!-- 精灵光点 -->
+  <div class="fireflies" id="fireflies"></div>
+
+  <!-- 翡翠光脉进度条 -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- 精灵符文石 -->
+  <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">O+</button>
+
+  <!-- 光羽 -->
+  <button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">^^</button>
+
+  <!-- 头部 -->
   <header class="blog-header">
     <div class="container">
-      <img src="avatar.jpg" alt="头像" class="avatar">
+      <!-- 世界树 -->
+      <div class="world-tree">
+        <div class="tree-sparkles">
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+          <div class="sparkle"></div><div class="sparkle"></div>
+        </div>
+        <div class="tree-canopy canopy-3"></div>
+        <div class="tree-canopy canopy-2"></div>
+        <div class="tree-canopy canopy-1"></div>
+        <div class="tree-trunk"></div>
+        <div class="tree-roots"></div>
+      </div>
+      <img src="avatar.jpg" alt="纹章" class="avatar">
       <h1 class="blog-title">片片公子</h1>
-      <p class="blog-subtitle">记录 · 分享 · 沉淀</p>
+      <p class="blog-subtitle">~ 记录 · 分享 · 沉淀 ~</p>
     </div>
   </header>
 
-  <!-- 导航栏 -->
+  <!-- 古木枝廊导航 -->
   <nav class="blog-nav">
     <div class="container">
-      <ul class="nav-list">
-        <li class="nav-item"><a href="#" class="nav-link">首页</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">文章</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">分类</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">关于我</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">联系我</a></li>
+      <button class="hamburger" id="hamburger" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-list" id="navList">
+        <li class="nav-item"><a href="index.html" class="nav-link" data-page="home">[ 精灵之庭 ]</a></li>
+        <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link" data-page="article">[ 知识古树 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="contact">[ 风之信使 ]</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- 主体内容 -->
+  <!-- 主体 -->
   <main class="container blog-main">
     <section class="articles">
-      <article class="article-card">
-        <h2 class="article-title">我的世界服务器</h2>
-        <div class="article-meta">————————</div>
-        <p class="article-excerpt">————————</p>
-        <a href="article-detail.html" class="read-more" target="_blank" rel="noopener noreferrer">打开</a>
-      </article>
+      <div class="search-section">
+        <div class="search-wrapper">
+          <span class="icon">*</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="在翠叶间寻找卷轴..." autocomplete="off">
+        </div>
+        <div class="filter-tags" id="filterTags"></div>
+      </div>
+
+      <div id="articlesContainer"></div>
     </section>
 
     <aside class="sidebar">
       <div class="widget">
-        <h3 class="widget-title">个人简介</h3>
-        <p>一个学生</p>
+        <h3 class="widget-title">[ 旅人档案 ]</h3>
+        <p>一位漫步在技术森林中的精灵旅人。热爱探索代码的奥秘，偶尔在月光下书写感悟。</p>
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--text-secondary);">
+          * 艾尔泽森林 · 翠叶城
+        </p>
       </div>
+
       <div class="widget">
-        <h3 class="widget-title">文章分类</h3>
+        <h3 class="widget-title">[ 卷轴分类 ]</h3>
         <ul class="widget-list">
-          <li><a href="#">开发</a></li>
-          <li><a href="#">笔记</a></li>
-          <li><a href="#">感悟</a></li>
+          <li><a href="#" data-tag-filter="开发">* 开发技艺</a></li>
+          <li><a href="#" data-tag-filter="笔记">* 旅人笔记</a></li>
+          <li><a href="#" data-tag-filter="感悟">* 古树低语</a></li>
+          <li><a href="#" data-tag-filter="游戏">* 幻境探索</a></li>
         </ul>
       </div>
+
       <div class="widget">
-        <h3 class="widget-title">——————</h3>
-        <ul class="widget-list">
-          <li><a href="#">————</a></li>
-          <li><a href="#">————</a></li>
-          <li><a href="#">————</a></li>
-        </ul>
+        <h3 class="widget-title">[ 精灵符文 ]</h3>
+        <div class="tag-cloud">
+          <span class="tag" data-tag="开发"># 开发</span>
+          <span class="tag" data-tag="笔记"># 笔记</span>
+          <span class="tag" data-tag="感悟"># 感悟</span>
+          <span class="tag" data-tag="游戏"># 游戏</span>
+        </div>
       </div>
     </aside>
   </main>
 
-  <!-- ========== 滚动文字（页面底部） ========== -->
   <div class="text-carousel">
     <div class="carousel-track">
       <div class="carousel-item">片片公子</div>
+      <div class="carousel-item">记录生活</div>
+      <div class="carousel-item">分享技术</div>
+      <div class="carousel-item">沉淀成长</div>
+      <div class="carousel-item">欢迎来访</div>
       <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <!-- 重复文字实现无缝滚动 -->
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">片片公子</div>
+      <div class="carousel-item">记录生活</div>
+      <div class="carousel-item">分享技术</div>
+      <div class="carousel-item">沉淀成长</div>
+      <div class="carousel-item">欢迎来访</div>
     </div>
   </div>
 
-  <!-- 页脚 -->
   <footer class="blog-footer">
     <div class="container">
-      <p>&copy; 主要为AI生成</p>
+      <div class="footer-social">
+        <a href="#" title="GitHub" aria-label="GitHub">GH</a>
+        <a href="#" title="邮箱" aria-label="邮箱">@</a>
+        <a href="#" title="RSS" aria-label="RSS">RS</a>
+      </div>
+      <p class="footer-copy">(c) 2025 PianPian :: 在翠叶间，静听代码低语</p>
     </div>
   </footer>
-</body>
 
+  <script src="script.js"></script>
+  <script>
+    // 生成精灵光点
+    (function() {
+      var container = document.getElementById('fireflies');
+      if (!container) return;
+      var html = '';
+      for (var i = 0; i < 18; i++) {
+        html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
+          (Math.random()*90).toFixed(1) + '%;--dur:' + (2.5+Math.random()*4).toFixed(1) +
+          's;--delay:' + (Math.random()*5).toFixed(1) + 's;"></div>';
+      }
+      container.innerHTML = html;
+    })();
+  </script>
+</body>
 </html>
