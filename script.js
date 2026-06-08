@@ -64,6 +64,7 @@
         if (page && page !== 'article') {
           // 不在首页时，统一跳转到 index.html（通过 hash 传递目标页面）
           if (document.body.dataset.page !== 'home') {
+            e.preventDefault();
             if (page === 'home') {
               window.location.href = 'index.html';
             } else {
