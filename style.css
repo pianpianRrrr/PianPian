@@ -203,26 +203,174 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 }
 
 /* ════════════════════════════════════════════════════════
-   主题切换 — 精灵符文石
+   天穹星体 — 左上角月亮/太阳
+   ════════════════════════════════════════════════════════ */
+.celestial-body {
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 9998;
+  width: 52px; height: 52px;
+  pointer-events: none;
+}
+
+/* 星体主体 */
+.celestial-body::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  width: 44px; height: 44px;
+  background: #f0e090;
+  top: 4px; left: 4px;
+  box-shadow:
+    0 0 18px rgba(240, 224, 144, 0.55),
+    0 0 40px rgba(240, 224, 144, 0.28),
+    0 0 65px rgba(240, 224, 144, 0.10);
+  animation: moonGlow 4s ease-in-out infinite;
+}
+
+/* 月牙缺口 — 用背景色圆片遮盖 */
+.celestial-body::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  width: 40px; height: 40px;
+  background: var(--bg);
+  top: -4px; left: 14px;
+}
+
+@keyframes moonGlow {
+  0%, 100% { box-shadow: 0 0 18px rgba(240, 224, 144, 0.55), 0 0 40px rgba(240, 224, 144, 0.28), 0 0 65px rgba(240, 224, 144, 0.10); }
+  50%      { box-shadow: 0 0 26px rgba(240, 224, 144, 0.70), 0 0 52px rgba(240, 224, 144, 0.38), 0 0 80px rgba(240, 224, 144, 0.16); }
+}
+
+/* ── 明亮模式：太阳 ── */
+[data-theme="light"] .celestial-body::before {
+  width: 36px; height: 36px;
+  background: #ffb830;
+  top: 8px; left: 8px;
+  box-shadow:
+    0 0 22px rgba(255, 184, 48, 0.65),
+    0 0 48px rgba(255, 200, 60, 0.35),
+    0 0 75px rgba(255, 200, 80, 0.15);
+  animation: sunGlow 3s ease-in-out infinite;
+}
+
+/* 太阳光线 — 8 条像素光线 */
+[data-theme="light"] .celestial-body::after {
+  width: 50px; height: 50px;
+  background: transparent;
+  top: 1px; left: 1px;
+  box-shadow:
+    0  -10px 0 2px rgba(255, 184, 48, 0.55),
+    0   10px 0 2px rgba(255, 184, 48, 0.55),
+    -10px 0 0 2px rgba(255, 184, 48, 0.55),
+    10px  0 0 2px rgba(255, 184, 48, 0.55),
+    -7px -7px 0 2px rgba(255, 184, 48, 0.55),
+    7px  -7px 0 2px rgba(255, 184, 48, 0.55),
+    -7px  7px 0 2px rgba(255, 184, 48, 0.55),
+    7px   7px 0 2px rgba(255, 184, 48, 0.55);
+  animation: sunRayPulse 3s ease-in-out infinite;
+}
+
+@keyframes sunGlow {
+  0%, 100% { box-shadow: 0 0 22px rgba(255, 184, 48, 0.65), 0 0 48px rgba(255, 200, 60, 0.35), 0 0 75px rgba(255, 200, 80, 0.15); }
+  50%      { box-shadow: 0 0 32px rgba(255, 184, 48, 0.80), 0 0 62px rgba(255, 200, 60, 0.48), 0 0 90px rgba(255, 200, 80, 0.22); }
+}
+
+@keyframes sunRayPulse {
+  0%, 100% { opacity: 0.7; transform: rotate(0deg); }
+  50%      { opacity: 1; transform: rotate(22.5deg); }
+}
+
+/* ════════════════════════════════════════════════════════
+   主题切换 — 符文石（日/月图标）
    ════════════════════════════════════════════════════════ */
 .theme-toggle {
   position: fixed; top: 20px; right: 20px; z-index: 10000;
   width: 44px; height: 44px;
   border: 2px solid var(--emerald);
+  border-radius: 50%;
   background: var(--bg-card);
-  color: var(--emerald);
-  font-family: var(--font-pixel);
-  font-size: 0.6rem;
+  color: transparent;
+  font-size: 0;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 3px 3px 0 #00000060, 0 0 12px var(--dust-glow);
   transition: all var(--transition);
   animation: runePulse 3s ease-in-out infinite;
+  overflow: visible;
 }
+
+/* 暗色模式按钮：显示太阳图标 → 点击进入光明 */
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #ffb830;
+  box-shadow:
+    0 0 8px rgba(255, 184, 48, 0.6),
+    0    -7px 0 1px #ffb830,
+    0     7px 0 1px #ffb830,
+    -7px  0 0 1px #ffb830,
+    7px   0 0 1px #ffb830,
+    -5px -5px 0 1px #ffb830,
+    5px  -5px 0 1px #ffb830,
+    -5px  5px 0 1px #ffb830,
+    5px   5px 0 1px #ffb830;
+  transition: all 0.4s ease;
+}
+
+.theme-toggle::after {
+  display: none;
+}
+
+/* 明亮模式按钮：显示月亮图标 → 点击进入暗夜 */
+[data-theme="light"] .theme-toggle::before {
+  width: 14px; height: 14px;
+  background: #6078b0;
+  box-shadow:
+    0 0 8px rgba(96, 120, 176, 0.5);
+    /* 移除太阳光线 */
+}
+
+/* 月牙缺口 */
+[data-theme="light"] .theme-toggle::after {
+  display: block;
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  margin-left: 5px;
+  margin-top: -1px;
+  transition: all 0.4s ease;
+}
+
 .theme-toggle:hover {
   background: var(--emerald);
-  color: #081808;
   transform: translateY(-2px);
   box-shadow: 5px 5px 0 #00000060, 0 0 20px var(--dust-glow);
+}
+.theme-toggle:hover::before {
+  box-shadow:
+    0 0 12px rgba(255, 184, 48, 0.8),
+    0    -7px 0 1px #ffb830,
+    0     7px 0 1px #ffb830,
+    -7px  0 0 1px #ffb830,
+    7px   0 0 1px #ffb830,
+    -5px -5px 0 1px #ffb830,
+    5px  -5px 0 1px #ffb830,
+    -5px  5px 0 1px #ffb830,
+    5px   5px 0 1px #ffb830;
+}
+[data-theme="light"] .theme-toggle:hover::before {
+  box-shadow: 0 0 12px rgba(96, 120, 176, 0.7);
 }
 .theme-toggle:active { transform: translateY(1px); box-shadow: 2px 2px 0 #00000060; }
 
@@ -1084,7 +1232,73 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   .nav-item { padding: 10px 16px; text-align: center; }
 
   .world-tree { width: 120px; height: 150px; }
-  .tree-trunk { width: 14px; height: 44px; }
+
+  /* 树干 — 等比缩小 + box-shadow 同步缩放 */
+  .tree-trunk {
+    bottom: 18px; width: 14px; height: 34px;
+    box-shadow:
+      -5px 0 0 var(--tree-trunk-dark),
+      5px 0 0 var(--tree-trunk-dark),
+      -2px -4px 0 var(--tree-trunk-dark),
+      2px -4px 0 var(--tree-trunk-dark),
+      0 -7px 0 var(--tree-trunk),
+      0 -11px 0 var(--tree-trunk-dark);
+  }
+
+  /* 树根 — 等比缩小 */
+  .tree-roots {
+    bottom: 13px;
+    width: 20px; height: 6px;
+    box-shadow:
+      -6px 3px 0 var(--tree-trunk-dark),
+      -11px 6px 0 var(--tree-trunk-dark),
+      6px 3px 0 var(--tree-trunk-dark),
+      11px 6px 0 var(--tree-trunk-dark),
+      -4px 1px 0 var(--tree-trunk),
+      4px 1px 0 var(--tree-trunk);
+  }
+
+  /* 树冠底层 — 等比缩小至 60% */
+  .canopy-1 {
+    top: 24px;
+    width: 72px; height: 42px;
+    box-shadow:
+      -5px -7px 0 var(--tree-canopy-1), 5px -7px 0 var(--tree-canopy-1),
+      -12px 5px 0 var(--tree-canopy-1), 12px 5px 0 var(--tree-canopy-1),
+      -8px 12px 0 var(--tree-canopy-2), 8px 12px 0 var(--tree-canopy-2),
+      0 10px 0 var(--tree-canopy-2), -2px 17px 0 var(--tree-canopy-1), 2px 17px 0 var(--tree-canopy-1),
+      0 19px 0 var(--tree-canopy-2), -6px 4px 0 var(--tree-canopy-2), 6px 4px 0 var(--tree-canopy-2),
+      0 -2px 0 var(--tree-canopy-2);
+  }
+
+  /* 树冠中层 — 等比缩小至 60% */
+  .canopy-2 {
+    top: 12px;
+    width: 84px; height: 33px;
+    box-shadow:
+      -4px -6px 0 var(--tree-canopy-2), 4px -6px 0 var(--tree-canopy-2),
+      -14px 2px 0 var(--tree-canopy-2), 14px 2px 0 var(--tree-canopy-2),
+      -10px 10px 0 var(--tree-canopy-3), 10px 10px 0 var(--tree-canopy-3),
+      0 5px 0 var(--tree-canopy-3), -5px 0 0 var(--tree-canopy-3), 5px 0 0 var(--tree-canopy-3),
+      0 -10px 0 var(--tree-canopy-3);
+  }
+
+  /* 树冠顶层 — 等比缩小至 60% */
+  .canopy-3 {
+    top: 1px;
+    width: 54px; height: 24px;
+    box-shadow:
+      -2px -8px 0 var(--tree-canopy-3), 2px -8px 0 var(--tree-canopy-3),
+      -10px -2px 0 var(--tree-canopy-3), 10px -2px 0 var(--tree-canopy-3),
+      -6px 5px 0 var(--tree-glow), 6px 5px 0 var(--tree-glow),
+      0 -13px 0 var(--tree-glow), 0 -4px 0 var(--tree-glow),
+      -4px -6px 0 var(--tree-glow), 4px -6px 0 var(--tree-glow);
+  }
+
+  /* 精灵光点容器 — 等比缩小 */
+  .tree-sparkles {
+    width: 90px; height: 78px;
+  }
 
   .article-card { padding: 16px; }
   .article-title { font-size: 0.65rem; }
@@ -1095,6 +1309,19 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   .comment-form .form-row { flex-direction: column; }
   .back-to-top { bottom: 16px; right: 16px; width: 40px; height: 40px; }
   .theme-toggle { top: 10px; right: 10px; width: 38px; height: 38px; }
+
+  /* 移动端星体缩小 */
+  .celestial-body { top: 8px; left: 8px; width: 38px; height: 38px; }
+  .celestial-body::before { width: 32px; height: 32px; top: 3px; left: 3px; }
+  .celestial-body::after { width: 28px; height: 28px; top: -3px; left: 10px; }
+  [data-theme="light"] .celestial-body::before { width: 26px; height: 26px; top: 6px; left: 6px; }
+  [data-theme="light"] .celestial-body::after { width: 36px; height: 36px; top: 1px; left: 1px;
+    box-shadow:
+      0 -7px 0 1px rgba(255,184,48,0.55), 0 7px 0 1px rgba(255,184,48,0.55),
+      -7px 0 0 1px rgba(255,184,48,0.55), 7px 0 0 1px rgba(255,184,48,0.55),
+      -5px -5px 0 1px rgba(255,184,48,0.55), 5px -5px 0 1px rgba(255,184,48,0.55),
+      -5px 5px 0 1px rgba(255,184,48,0.55), 5px 5px 0 1px rgba(255,184,48,0.55);
+  }
 }
 
 @media (max-width: 480px) {

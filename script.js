@@ -40,18 +40,6 @@
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('blog-theme', next);
     });
-
-    // 更新按钮图标（像素风符号）
-    function updateIcon() {
-      const theme = document.documentElement.getAttribute('data-theme');
-      toggle.textContent = theme === 'light' ? '~$~' : 'O+';
-    }
-    updateIcon();
-    // 监听属性变化
-    new MutationObserver(updateIcon).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
   }
 
   // ════════════════════════════════════════════════════════
