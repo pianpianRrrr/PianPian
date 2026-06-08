@@ -62,8 +62,13 @@
         hamburger.classList.remove('active');
         const page = e.target.dataset.page;
         if (page && page !== 'article') {
-          // 不在首页时点"精灵之庭"，放行让浏览器跳转到 index.html
-          if (page === 'home' && document.body.dataset.page !== 'home') {
+          // 不在首页时，统一跳转到 index.html（通过 hash 传递目标页面）
+          if (document.body.dataset.page !== 'home') {
+            if (page === 'home') {
+              window.location.href = 'index.html';
+            } else {
+              window.location.href = 'index.html#' + page;
+            }
             return;
           }
           e.preventDefault();
@@ -782,6 +787,13 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
       renderArticles(articleData);
       initSearch();
       initRevealOnScroll();
+      // 处理从其他页面带来的 hash 定位（如 index.html#categories）
+      if (window.location.hash) {
+        var hash = window.location.hash.replace('#', '');
+        if (hash && hash !== 'home') {
+          switchPage(hash);
+        }
+      }
     }
 
     if (page === 'article') {
