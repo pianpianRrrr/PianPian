@@ -62,6 +62,10 @@
         hamburger.classList.remove('active');
         const page = e.target.dataset.page;
         if (page && page !== 'article') {
+          // 不在首页时点"精灵之庭"，放行让浏览器跳转到 index.html
+          if (page === 'home' && document.body.dataset.page !== 'home') {
+            return;
+          }
           e.preventDefault();
           switchPage(page);
         }
