@@ -243,7 +243,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes moonGlow {
   0%, 100% { box-shadow: 0 0 18px rgba(240, 224, 144, 0.55), 0 0 40px rgba(240, 224, 144, 0.28), 0 0 65px rgba(240, 224, 144, 0.10); }
   50%      { box-shadow: 0 0 26px rgba(240, 224, 144, 0.70), 0 0 52px rgba(240, 224, 144, 0.38), 0 0 80px rgba(240, 224, 144, 0.16); }
-}
 
 /* ── 明亮模式：太阳 ── */
 [data-theme="light"] .celestial-body::before {
@@ -277,12 +276,10 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes sunGlow {
   0%, 100% { box-shadow: 0 0 22px rgba(255, 184, 48, 0.65), 0 0 48px rgba(255, 200, 60, 0.35), 0 0 75px rgba(255, 200, 80, 0.15); }
   50%      { box-shadow: 0 0 32px rgba(255, 184, 48, 0.80), 0 0 62px rgba(255, 200, 60, 0.48), 0 0 90px rgba(255, 200, 80, 0.22); }
-}
 
 @keyframes sunRayPulse {
   0%, 100% { opacity: 0.7; transform: rotate(0deg); }
   50%      { opacity: 1; transform: rotate(22.5deg); }
-}
 
 /* ════════════════════════════════════════════════════════
    主题切换 — 符文石（日/月图标）
@@ -377,7 +374,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes runePulse {
   0%, 100% { box-shadow: 3px 3px 0 #00000060, 0 0 10px var(--dust-glow); }
   50%      { box-shadow: 3px 3px 0 #00000060, 0 0 22px var(--dust-glow); }
-}
 
 /* ════════════════════════════════════════════════════════
    回到顶部 — 光羽
@@ -441,13 +437,10 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 }
 @keyframes fireflyFloat {
   0%   { opacity: 0; transform: translateY(0) translateX(0); }
-  will-change: transform, opacity;
   20%  { opacity: 1; }
   50%  { opacity: 0.8; transform: translateY(-60px) translateX(20px); }
   80%  { opacity: 0.3; }
   100% { opacity: 0; transform: translateY(-120px) translateX(-20px); }
-  will-change: transform, opacity;
-}
 
 /* ════════════════════════════════════════════════════════
    萤火暗夜显隐
@@ -512,7 +505,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   60%  { transform: translateX(60vw) translateY(-8px) scaleX(1); }
   80%  { transform: translateX(80vw) translateY(-18px) scaleX(1); }
   100% { transform: translateX(calc(100vw + 60px)) translateY(0) scaleX(1); }
-}
    精灵云朵 — 林间雾气
    ════════════════════════════════════════════════════════ */
 .clouds {
@@ -554,7 +546,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes cloudFloat {
   0%   { transform: translateX(-160px); }
   100% { transform: translateX(calc(100vw + 60px)); }
-}
 
 /* ════════════════════════════════════════════════════════
    世界古树 — 全幅树冠覆顶 · 根扎底部
@@ -569,7 +560,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes treeRise {
   0%   { opacity: 0; transform: scale(0.92); }
   100% { opacity: 1; transform: scale(1); }
-}
 
 /* ══ 树冠 — 8团叶片覆盖整个顶部 ══ */
 .tree-canopy-top {
@@ -611,7 +601,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes leafBreathe {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.03); }
-}
 
 
 /* ══ 根系 — 底部6条根指 ══ */
@@ -641,7 +630,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes sparkleGlow {
   0%, 100% { opacity: 0.2; transform: scale(0.7); }
   50%      { opacity: 1;   transform: scale(2.5); }
-}
 
 /* ══ 精灵仙子 ══ */
 .tree-fairy {
@@ -671,11 +659,9 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   60%  { transform: translate(40px, 15px);  opacity: 0.7; }
   80%  { transform: translate(-30px, -10px); opacity: 0.9; }
   100% { transform: translate(0, 0);       opacity: 1; }
-}
 @keyframes fairyWings {
   0%, 100% { transform: scaleX(1); }
   50%      { transform: scaleX(0.3); }
-}
 
 /* ════════════════════════════════════════════════════════
    头部
@@ -738,7 +724,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes heraldryFloat {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-5px); }
-}
 
 /* ════════════════════════════════════════════════════════
    导航栏 — 古木枝廊
@@ -847,11 +832,9 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes navLeafFloat {
   0%, 100% { opacity: 0.35; transform: translateY(-50%) rotate(45deg) translateY(0); }
   50%      { opacity: 0.8;  transform: translateY(-50%) rotate(45deg) translateY(-8px); }
-}
 @keyframes navLeafFloatFar {
   0%, 100% { opacity: 0.25; transform: translateY(-50%) rotate(45deg) translateY(0); }
   50%      { opacity: 0.65; transform: translateY(-50%) rotate(45deg) translateY(-5px); }
-}
 
 /* ════════════════════════════════════════════════════════
    主体
@@ -1100,7 +1083,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes scroll {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
 
 /* ════════════════════════════════════════════════════════
    页脚
@@ -1353,7 +1335,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   8%   { opacity: 0.7; }
   92%  { opacity: 0.5; }
   100% { transform: translateY(105vh) rotate(var(--spin)) translateX(var(--drift)); opacity: 0; }
-}
 
 /* ════════════════════════════════════════════════════════
    光标精灵尘
@@ -1372,7 +1353,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   0%   { transform: scale(0) translate(0, 0); opacity: 0; }
   30%  { transform: scale(1.8) translate(2px, -4px); opacity: 1; }
   100% { transform: scale(0) translate(8px, -14px); opacity: 0; }
-}
 
 /* ════════════════════════════════════════════════════════
    进度条 — 翡翠光脉（增强）
@@ -1391,7 +1371,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes progressSpark {
   0%, 100% { opacity: 0.5; transform: translateY(-50%) scale(0.8); }
   50%      { opacity: 1;   transform: translateY(-50%) scale(1.8); }
-}
 
 /* ════════════════════════════════════════════════════════
    TOC 目录高亮
@@ -1442,7 +1421,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes sectionIn {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
-}
 .section-header {
   text-align: center;
   margin-bottom: 24px;
@@ -1555,7 +1533,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
 @keyframes rippleOut {
   0%   { width: 10px; opacity: 0.7; }
   100% { width: 160px; opacity: 0; }
-}
 /* 水珠粒子 */
 .water-drops {
   position: absolute;
@@ -1594,7 +1571,6 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   0%   { bottom: 0;   opacity: 1; transform: translateX(-50%) scale(1); }
   60%  { opacity: 0.9; }
   100% { bottom: 110px; opacity: 0; transform: translateX(-50%) translateX(var(--drift, 0px)) scale(0.3); }
-}
 /* 水珠左右飘散 */
 .drop:nth-child(2n)  { --drift: 10px; }
 .drop:nth-child(4n)  { --drift: -8px; }
@@ -1714,4 +1690,26 @@ img { max-width: 100%; height: auto; image-rendering: pixelated; }
   .filter-btn { padding: 4px 10px; font-size: 0.5rem; }
   .article-nav { flex-direction: column; }
   .article-title { font-size: 0.6rem; }
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }
