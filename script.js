@@ -55,11 +55,16 @@
       hamburger.classList.toggle('active', open);
     });
 
-    // 点击导航链接后关闭菜单
+    // 点击导航链接 — 页面切换 + 关闭菜单
     navList.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') {
         navList.classList.remove('open');
         hamburger.classList.remove('active');
+        const page = e.target.dataset.page;
+        if (page && page !== 'article') {
+          e.preventDefault();
+          switchPage(page);
+        }
       }
     });
 
@@ -623,27 +628,165 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
   }
 
   // ════════════════════════════════════════════════════════
+  //  11. 卡片滚动渐入 (IntersectionObserver)
+  // ════════════════════════════════════════════════════════
+  function initRevealOnScroll() {
+    var cards = $$('.article-card');
+    if (!cards.length) return;
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    cards.forEach(function(card) { observer.observe(card); });
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  12. 光标精灵尘拖尾
+  // ════════════════════════════════════════════════════════
+  function initCursorSparkles() {
+    var ticking = false;
+    var lastX = 0, lastY = 0;
+    function spawnSparkle(x, y) {
+      var s = document.createElement('div');
+      s.className = 'cursor-sparkle';
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      document.body.appendChild(s);
+      s.addEventListener('animationend', function() { s.remove(); });
+    }
+    document.addEventListener('mousemove', function(e) {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          var dx = e.clientX - lastX;
+          var dy = e.clientY - lastY;
+          if (Math.sqrt(dx*dx + dy*dy) > 30) {
+            spawnSparkle(e.clientX, e.clientY);
+            lastX = e.clientX;
+            lastY = e.clientY;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+
+  // ════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════
+  //  13. 天际飞鸟（白日可见）
+  // ════════════════════════════════════════════════════════
+  function initSkyBirds() {
+    var container = document.getElementById('skyBirds');
+    if (!container) return;
+    var html = '';
+    for (var i = 0; i < 6; i++) {
+      var top = (8 + Math.random() * 25).toFixed(0);
+      var dur = (12 + Math.random() * 16).toFixed(1);
+      var delay = (Math.random() * 20).toFixed(1);
+      var size = (0.6 + Math.random() * 1.2).toFixed(2);
+      html += '<div class="bird" style="top:' + top + '%;--fly-dur:' + dur + 's;--fly-delay:-' + delay + 's;transform:scale(' + size + ');"></div>';
+    }
+    container.innerHTML = html;
+  }
+
+  //  13. 飘落翠叶
+  // ════════════════════════════════════════════════════════
+  function initFallingLeaves() {
+    var container = document.createElement('div');
+    container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:995;';
+    document.body.appendChild(container);
+    for (var i = 0; i < 10; i++) {
+      var leaf = document.createElement('div');
+      leaf.className = 'falling-leaf';
+      var left = (Math.random() * 96).toFixed(1);
+      var dur = (8 + Math.random() * 14).toFixed(1);
+      var delay = (Math.random() * 16).toFixed(1);
+      var drift = ((Math.random() - 0.5) * 160).toFixed(0);
+      var spin = (360 + Math.random() * 720).toFixed(0);
+      var size = (6 + Math.random() * 8).toFixed(0);
+      leaf.style.cssText = 'left:' + left + '%;top:-20px;';
+      leaf.innerHTML = '<div class="leaf-inner" style="--fall-dur:' + dur + 's;--fall-delay:-' + delay + 's;--drift:' + drift + 'px;--spin:' + spin + 'deg;width:' + size + 'px;height:' + size + 'px;"></div>';
+      container.appendChild(leaf);
+    }
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  14. TOC 滚动高亮
+  // ════════════════════════════════════════════════════════
+  function initTOCSpy() {
+    var tocLinks = $$('.toc-list a');
+    var headings = $$('.article-content h2');
+    if (!tocLinks.length || !headings.length) return;
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function(l) { l.classList.remove('toc-active'); });
+          var active = $('.toc-list a[href="#' + entry.target.id + '"]');
+          if (active) active.classList.add('toc-active');
+        }
+      });
+    }, { threshold: 0.5, rootMargin: '-80px 0px -60% 0px' });
+    headings.forEach(function(h) { observer.observe(h); });
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  //  15. 页面切换
+  // ════════════════════════════════════════════════════════
+  function switchPage(page) {
+    $$('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+    var nl = $('.nav-link[data-page="' + page + '"]');
+    if (nl) nl.classList.add('active');
+    var main = $('.blog-main');
+    var search = $('.search-section');
+    var sidebar = $('.sidebar');
+    $$('.page-section').forEach(function(s) { s.classList.remove('active'); });
+    if (page === 'home') {
+      if (main) main.style.display = '';
+      if (search) search.style.display = '';
+      if (sidebar) sidebar.style.display = '';
+    } else {
+      if (main) main.style.display = 'none';
+      var map = { categories: 'page-categories', about: 'page-about', contact: 'page-contact' };
+      var sec = document.getElementById(map[page]);
+      if (sec) sec.classList.add('active');
+      
+    }
+  }
+
+
+  // ════════════════════════════════════════════════════════
   //  11. 初始化入口
   // ════════════════════════════════════════════════════════
   function init() {
-    // 所有页面共用的功能
+    /* 所有页面共用 */
     initTheme();
     initMobileMenu();
     initProgressBar();
     initBackToTop();
     initNavHighlight();
+    initCursorSparkles();
+    initSkyBirds();
+    initFallingLeaves();
 
-    // 首页专属
-    const page = document.body.dataset.page;
+    var page = document.body.dataset.page;
     if (page === 'home') {
       renderArticles(articleData);
       initSearch();
+      initRevealOnScroll();
     }
 
-    // 文章详情页专属
     if (page === 'article') {
       loadArticleContent();
       initComments();
+      setTimeout(function() {
+        initRevealOnScroll();
+        initTOCSpy();
+      }, 100);
     }
   }
 

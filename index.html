@@ -10,7 +10,7 @@
 </head>
 <body data-page="home">
 
-  <!-- 天穹星体：月亮/太阳 -->
+  <!-- 天穹星体：月亮/太阳（在导航栏下方） -->
   <div class="celestial-body"></div>
 
   <!-- 林间雾气 -->
@@ -19,6 +19,9 @@
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
   </div>
+
+  <!-- 天际飞鸟（白日） -->
+  <div class="sky-birds" id="skyBirds"></div>
 
   <!-- 精灵光点 -->
   <div class="fireflies" id="fireflies"></div>
@@ -35,19 +38,26 @@
   <!-- 头部 -->
   <header class="blog-header">
     <div class="container">
-      <!-- 世界树 -->
+      <!-- 世界古树 — 全幅树冠覆顶 -->
       <div class="world-tree">
-        <div class="tree-sparkles">
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
+        <div class="tree-canopy-top">
+          <span class="leaf-cluster lc1"></span>
+          <span class="leaf-cluster lc2"></span>
+          <span class="leaf-cluster lc3"></span>
+          <span class="leaf-cluster lc4"></span>
+          <span class="leaf-cluster lc5"></span>
+          <span class="leaf-cluster lc6"></span>
+          <span class="leaf-cluster lc7"></span>
+          <span class="leaf-cluster lc8"></span>
         </div>
-        <div class="tree-canopy canopy-3"></div>
-        <div class="tree-canopy canopy-2"></div>
-        <div class="tree-canopy canopy-1"></div>
-        <div class="tree-trunk"></div>
-        <div class="tree-roots"></div>
+
+
+        <div class="tree-sparkles">
+          <span class="sparkle"></span><span class="sparkle"></span>
+          <span class="sparkle"></span><span class="sparkle"></span>
+          <span class="sparkle"></span><span class="sparkle"></span>
+        </div>
+        <div class="tree-fairy"></div>
       </div>
       <img src="avatar.jpg" alt="纹章" class="avatar">
       <h1 class="blog-title">片片公子</h1>
@@ -62,7 +72,7 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-list" id="navList">
-        <li class="nav-item"><a href="index.html" class="nav-link" data-page="home">[ 精灵之庭 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link active" data-page="home">[ 精灵之庭 ]</a></li>
         <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link" data-page="article">[ 知识古树 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
@@ -116,6 +126,81 @@
     </aside>
   </main>
 
+  <!-- ══ 翠叶藏书 — 项目文章 ══ -->
+  <section class="container page-section" id="page-categories">
+    <div class="section-header">
+      <h2 class="section-title">[ 翠叶藏书 ]</h2>
+      <p class="section-desc">* 此间收藏着旅人探索技术森林时留下的每一片翠叶卷轴</p>
+    </div>
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-icon">MC</div>
+        <h3>我的世界服务器搭建</h3>
+        <p>从零搭建Minecraft服务器全过程记录，含Java配置与插件推荐</p>
+        <span class="tag"># 游戏</span><span class="tag"># 开发</span>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">JS</div>
+        <h3>JavaScript 异步编程</h3>
+        <p>从回调到 async/await 的异步编程演进之路</p>
+        <span class="tag"># 开发</span><span class="tag"># 笔记</span>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">FE</div>
+        <h3>前端学习之路</h3>
+        <p>两年半前端学习历程的总结与感悟</p>
+        <span class="tag"># 感悟</span><span class="tag"># 笔记</span>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">GT</div>
+        <h3>Git 团队协作实践</h3>
+        <p>Git Flow / GitHub Flow / Trunk-Based 分支策略对比</p>
+        <span class="tag"># 开发</span><span class="tag"># 笔记</span>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">??</div>
+        <h3>更多卷轴即将揭晓</h3>
+        <p>新项目正在探索中，敬请期待...</p>
+        <span class="tag"># 预告</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 贤者之泉 — 像素喷泉 ══ -->
+  <section class="container page-section" id="page-about">
+    <div class="section-header">
+      <h2 class="section-title">[ 贤者之泉 ]</h2>
+      <p class="section-desc">* 古老的魔法泉眼，永不停歇地涌出晶莹水珠</p>
+    </div>
+    <div class="fountain-box">
+      <div class="fountain-pool">
+        <div class="fountain-base"></div>
+        <div class="water-drops">
+          <span class="drop d1"></span><span class="drop d2"></span>
+          <span class="drop d3"></span><span class="drop d4"></span>
+          <span class="drop d5"></span><span class="drop d6"></span>
+          <span class="drop d7"></span><span class="drop d8"></span>
+          <span class="drop d9"></span><span class="drop d10"></span>
+        </div>
+        <div class="pool-ripple r1"></div>
+        <div class="pool-ripple r2"></div>
+        <div class="pool-ripple r3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 风之信使 — 联系方式 ══ -->
+  <section class="container page-section" id="page-contact">
+    <div class="section-header">
+      <h2 class="section-title">[ 风之信使 ]</h2>
+      <p class="section-desc">* 风会将你的消息带给这位森林旅人</p>
+    </div>
+    <div class="contact-simple">
+      <p class="contact-qq-num">QQ 1240778501</p>
+      <a href="tencent://message/?uin=1240778501" class="contact-qq-btn">[ 发起会话 ]</a>
+    </div>
+  </section>
+
   <div class="text-carousel">
     <div class="carousel-track">
       <div class="carousel-item">片片公子</div>
@@ -149,10 +234,10 @@
       var container = document.getElementById('fireflies');
       if (!container) return;
       var html = '';
-      for (var i = 0; i < 18; i++) {
+      for (var i = 0; i < 25; i++) {
         html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
-          (Math.random()*90).toFixed(1) + '%;--dur:' + (2.5+Math.random()*4).toFixed(1) +
-          's;--delay:' + (Math.random()*5).toFixed(1) + 's;"></div>';
+          (Math.random()*90).toFixed(1) + '%;--dur:' + (2+Math.random()*5).toFixed(1) +
+          's;--delay:' + (Math.random()*6).toFixed(1) + 's;"></div>';
       }
       container.innerHTML = html;
     })();

@@ -10,7 +10,7 @@
 </head>
 <body data-page="article">
 
-  <!-- 天穹星体：月亮/太阳 -->
+  <!-- 天穹星体：月亮/太阳（在导航栏下方） -->
   <div class="celestial-body"></div>
 
   <!-- 林间雾气 -->
@@ -19,6 +19,9 @@
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
   </div>
+
+  <!-- 天际飞鸟（白日） -->
+  <div class="sky-birds" id="skyBirds"></div>
 
   <!-- 精灵光点 -->
   <div class="fireflies" id="fireflies"></div>
@@ -35,19 +38,26 @@
   <!-- 头部 -->
   <header class="blog-header">
     <div class="container">
-      <!-- 世界树 -->
+      <!-- 世界古树 — 全幅树冠覆顶 -->
       <div class="world-tree">
-        <div class="tree-sparkles">
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
-          <div class="sparkle"></div><div class="sparkle"></div>
+        <div class="tree-canopy-top">
+          <span class="leaf-cluster lc1"></span>
+          <span class="leaf-cluster lc2"></span>
+          <span class="leaf-cluster lc3"></span>
+          <span class="leaf-cluster lc4"></span>
+          <span class="leaf-cluster lc5"></span>
+          <span class="leaf-cluster lc6"></span>
+          <span class="leaf-cluster lc7"></span>
+          <span class="leaf-cluster lc8"></span>
         </div>
-        <div class="tree-canopy canopy-3"></div>
-        <div class="tree-canopy canopy-2"></div>
-        <div class="tree-canopy canopy-1"></div>
-        <div class="tree-trunk"></div>
-        <div class="tree-roots"></div>
+
+
+        <div class="tree-sparkles">
+          <span class="sparkle"></span><span class="sparkle"></span>
+          <span class="sparkle"></span><span class="sparkle"></span>
+          <span class="sparkle"></span><span class="sparkle"></span>
+        </div>
+        <div class="tree-fairy"></div>
       </div>
       <img src="avatar.jpg" alt="纹章" class="avatar">
       <h1 class="blog-title">片片公子</h1>
@@ -138,10 +148,10 @@
       var container = document.getElementById('fireflies');
       if (!container) return;
       var html = '';
-      for (var i = 0; i < 18; i++) {
+      for (var i = 0; i < 25; i++) {
         html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
-          (Math.random()*90).toFixed(1) + '%;--dur:' + (2.5+Math.random()*4).toFixed(1) +
-          's;--delay:' + (Math.random()*5).toFixed(1) + 's;"></div>';
+          (Math.random()*90).toFixed(1) + '%;--dur:' + (2+Math.random()*5).toFixed(1) +
+          's;--delay:' + (Math.random()*6).toFixed(1) + 's;"></div>';
       }
       container.innerHTML = html;
     })();
