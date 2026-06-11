@@ -6,38 +6,49 @@
 (function () {
   'use strict';
 
-  // ── 工具函数 ──────────────────────────────────────────
-  const $ = (sel, ctx) => (ctx || document).querySelector(sel);
-  const $$ = (sel, ctx) => [...(ctx || document).querySelectorAll(sel)];
-
-  function formatDate(ts) {
-    const d = new Date(ts);
-    const pad = n => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
+  // ── 工具函数（来自 BlogUtils）──────────────────────────
+  var $ = BlogUtils.$;
+  var $$ = BlogUtils.$$;
+  var formatDate = BlogUtils.formatDate;
+  var escapeHtml = BlogUtils.escapeHtml;
+  var calcReadTime = BlogUtils.calcReadTime;
 
   // ════════════════════════════════════════════════════════
   //  1. 主题切换
   // ════════════════════════════════════════════════════════
   function initTheme() {
-    const toggle = $('#themeToggle');
+    var toggle = $('#themeToggle');
     if (!toggle) return;
 
-    const saved = localStorage.getItem('blog-theme');
-    if (saved) {
+    var saved = localStorage.getItem('blog-theme');
+    if (!saved) {
+      // 首次访问：尊重系统偏好
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    } else {
       document.documentElement.setAttribute('data-theme', saved);
     }
 
-    toggle.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
+    // 监听系统主题变化（仅在用户未手动设置时生效）
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem('blog-theme')) {
+        if (e.matches) {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      }
+    });
+
+    toggle.addEventListener('click', function() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'light' ? 'dark' : 'light';
+      if (next === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', next);
+      }
       localStorage.setItem('blog-theme', next);
     });
   }
@@ -138,44 +149,7 @@
   // ════════════════════════════════════════════════════════
   //  6. 首页 — 文章数据 & 渲染
   // ════════════════════════════════════════════════════════
-  const articleData = [
-    {
-      id: 'mc-server',
-      title: '从零搭建我的世界服务器',
-      date: '2025-03-15',
-      tags: ['开发', '游戏'],
-      readTime: '约 8 分钟',
-      excerpt: '记录从购买 VPS 到配置插件、优化性能的完整过程。包括 Java 环境配置、server.properties 调优、常用插件推荐以及日常运维经验分享。',
-      url: 'article-detail.html?id=mc-server'
-    },
-    {
-      id: 'js-async',
-      title: 'JavaScript 异步编程：从回调到 async/await',
-      date: '2025-04-22',
-      tags: ['开发', '笔记'],
-      readTime: '约 12 分钟',
-      excerpt: '深入理解 JS 异步编程的演进历程。从回调地狱到 Promise，再到 Generator 和 async/await，结合实例讲解每个阶段的原理与最佳实践。',
-      url: 'article-detail.html?id=js-async'
-    },
-    {
-      id: 'learning-path',
-      title: '我的前端学习之路',
-      date: '2025-05-08',
-      tags: ['感悟', '笔记'],
-      readTime: '约 6 分钟',
-      excerpt: '从 HTML/CSS 入门到接触 React、Vue 等现代框架，分享这一路上的学习资源和踩坑经历，希望能帮助同样在路上的朋友。',
-      url: 'article-detail.html?id=learning-path'
-    },
-    {
-      id: 'git-workflow',
-      title: 'Git 团队协作工作流实践',
-      date: '2025-05-30',
-      tags: ['开发', '笔记'],
-      readTime: '约 10 分钟',
-      excerpt: '总结 Git Flow、GitHub Flow 和 Trunk-Based Development 的优劣，以及在实际项目中如何选择合适的分支策略，附常见冲突解决技巧。',
-      url: 'article-detail.html?id=git-workflow'
-    }
-  ];
+  var articleData = BlogData.articles;
 
   function renderArticles(articles) {
     const container = $('#articlesContainer');
@@ -186,22 +160,18 @@
       return;
     }
 
-    container.innerHTML = articles.map(a => `
-      <article class="article-card" data-tags="${a.tags.join(',')}">
-        <h2 class="article-title">
-          <a href="${a.url}">${escapeHtml(a.title)}</a>
-        </h2>
-        <div class="article-meta">
-          <span>* ${a.date}</span>
-          <span class="read-time">~ ${a.readTime} ~</span>
-        </div>
-        <div class="article-tags">
-          ${a.tags.map(t => `<span class="tag" data-tag="${t}"># ${t}</span>`).join('')}
-        </div>
-        <p class="article-excerpt">${escapeHtml(a.excerpt)}</p>
-        <a href="${a.url}" class="read-more">[ 展开古老卷轴 ]</a>
-      </article>
-    `).join('');
+    container.innerHTML = articles.map(function(a) {
+      // 动态计算阅读时长
+      var content = BlogData.contents[a.id];
+      var readTime = content ? calcReadTime(content.content) : a.readTime;
+      return '<article class="article-card" data-tags="' + a.tags.join(',') + '">' +
+        '<h2 class="article-title"><a href="' + a.url + '">' + escapeHtml(a.title) + '</a></h2>' +
+        '<div class="article-meta"><span>* ' + a.date + '</span><span class="read-time">~ ' + readTime + ' ~</span></div>' +
+        '<div class="article-tags">' + a.tags.map(function(t) { return '<span class="tag" data-tag="' + t + '"># ' + t + '</span>'; }).join('') + '</div>' +
+        '<p class="article-excerpt">' + escapeHtml(a.excerpt) + '</p>' +
+        '<a href="' + a.url + '" class="read-more">[ 展开古老卷轴 ]</a>' +
+        '</article>';
+    }).join('');
   }
 
   // ════════════════════════════════════════════════════════
@@ -244,8 +214,13 @@
 
       renderArticles(filtered);
 
+      // 搜索高亮
+      if (keyword) {
+        setTimeout(function() { highlightSearch(keyword); }, 50);
+      }
+
       // 重新绑定标签点击事件
-      $$('.article-tags .tag').forEach(tagEl => {
+      $$('.article-tags .tag').forEach(function(tagEl) {
         tagEl.addEventListener('click', () => {
           const tag = tagEl.dataset.tag;
           activeTag = tag;
@@ -390,195 +365,7 @@
   // ════════════════════════════════════════════════════════
   //  10. 文章详情 — 加载文章内容
   // ════════════════════════════════════════════════════════
-  const articleContents = {
-    'mc-server': {
-      title: '从零搭建我的世界服务器',
-      date: '2025-03-15',
-      tags: ['开发', '游戏'],
-      author: '片片公子',
-      readTime: '约 8 分钟',
-      content: `
-        <p>最近和朋友们想一起玩 Minecraft，但使用第三方服务延迟太高，于是决定自己在 VPS 上搭建一台服务器。本文记录整个搭建过程，希望对有同样需求的朋友有所帮助。</p>
-
-        <h2>选择服务器</h2>
-        <p>我选择的是 2核4G 的轻量云服务器，系统选 Ubuntu 22.04 LTS。对于 5-10 人同时在线，这个配置足够了。如果预算有限，也可以选择 1核2G 的配置，但需要做一些性能优化。</p>
-        <p>服务器带宽建议至少 5Mbps，否则玩家会有明显的卡顿感。地理位置选择离小伙伴们最近的机房。</p>
-
-        <h2>安装 Java 环境</h2>
-        <p>Minecraft 服务端需要 Java 运行环境。推荐使用 Java 17 或更高版本：</p>
-        <pre><code>sudo apt update
-sudo apt install openjdk-17-jdk -y
-java -version</code></pre>
-        <p>验证安装成功后，Java 环境就准备好了。</p>
-
-        <h2>下载服务端</h2>
-        <p>我选择的是 PaperMC，它是一个高性能的 Minecraft 服务端，兼容 Bukkit/Spigot 插件：</p>
-        <pre><code>mkdir minecraft && cd minecraft
-wget https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/latest/downloads/paper-1.20.4-latest.jar
-mv paper-*.jar server.jar</code></pre>
-
-        <h2>配置 server.properties</h2>
-        <p>这是服务器最核心的配置文件，几个关键参数：</p>
-        <ul>
-          <li><code>server-port=25565</code> — 默认端口，记得在防火墙开放</li>
-          <li><code>max-players=20</code> — 最大玩家数</li>
-          <li><code>view-distance=10</code> — 视距，配置低可以调小</li>
-          <li><code>difficulty=normal</code> — 游戏难度</li>
-          <li><code>online-mode=true</code> — 正版验证，建议开启</li>
-        </ul>
-
-        <h2>启动与运维</h2>
-        <p>使用 screen 或 tmux 让服务器在后台持续运行：</p>
-        <pre><code>screen -S mc
-java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
-        <p>按 Ctrl+A+D 可以断开 screen 会话，服务器继续运行。需要回到控制台时输入 <code>screen -r mc</code>。</p>
-        <p>建议配合 <code>crontab</code> 定时备份地图数据，避免意外丢失进度。</p>
-
-        <h2>推荐插件</h2>
-        <p>以下是我目前在用的插件，都经过了实际测试：</p>
-        <ul>
-          <li><strong>LuckPerms</strong> — 权限管理，必备</li>
-          <li><strong>EssentialsX</strong> — 基础指令增强（/home, /spawn 等）</li>
-          <li><strong>CoreProtect</strong> — 方块变动日志，防熊孩子</li>
-          <li><strong>Dynmap</strong> — 网页实时地图，非常酷</li>
-        </ul>
-        <p>到此服务器就搭建完成了！整个过程大约需要 30 分钟。如果遇到问题，欢迎在评论区交流~</p>
-      `
-    },
-    'js-async': {
-      title: 'JavaScript 异步编程：从回调到 async/await',
-      date: '2025-04-22',
-      tags: ['开发', '笔记'],
-      author: '片片公子',
-      readTime: '约 12 分钟',
-      content: `
-        <p>异步编程是 JavaScript 的核心特性之一。从最早的回调函数到现代的 async/await，JS 的异步处理方式经历了巨大的演进。本文带你系统回顾这段历史。</p>
-
-        <h2>回调函数时代</h2>
-        <p>在 Promise 出现之前，所有的异步操作都依赖回调函数：</p>
-        <pre><code>fs.readFile('data.json', 'utf8', (err, data) => {
-  if (err) { console.error(err); return; }
-  const parsed = JSON.parse(data);
-  fs.writeFile('output.json', JSON.stringify(parsed), (err) => {
-    if (err) { console.error(err); return; }
-    console.log('完成！');
-  });
-});</code></pre>
-        <p>当异步操作增多，回调层层嵌套，就形成了臭名昭著的「回调地狱」。代码可读性极差，错误处理也非常繁琐。</p>
-
-        <h2>Promise 的救赎</h2>
-        <p>ES6 引入的 Promise 从根本上改变了异步编程的体验：</p>
-        <pre><code>fetch('/api/user')
-  .then(res => res.json())
-  .then(user => fetch(\`/api/posts/\${user.id}\`))
-  .then(res => res.json())
-  .then(posts => console.log(posts))
-  .catch(err => console.error('请求失败:', err));</code></pre>
-        <p>Promise 通过链式调用解决了回调嵌套，<code>.catch()</code> 能统一捕获链上任意位置的错误。但它仍然没有让异步代码看起来像同步代码。</p>
-
-        <h2>async/await — 语法糖的革命</h2>
-        <p>ES2017 的 async/await 让我们可以用同步的写法写异步代码：</p>
-        <pre><code>async function getUserPosts() {
-  try {
-    const userRes = await fetch('/api/user');
-    const user = await userRes.json();
-    const postsRes = await fetch(\`/api/posts/\${user.id}\`);
-    const posts = await postsRes.json();
-    return posts;
-  } catch (err) {
-    console.error('请求失败:', err);
-  }
-}</code></pre>
-        <p>async 函数始终返回一个 Promise，await 只能在 async 函数内部使用。这种模式让错误处理回归了熟悉的 try/catch 语法。</p>
-
-        <h2>常见陷阱</h2>
-        <ul>
-          <li><strong>串行等待</strong>：多个不相关的请求应该用 <code>Promise.all</code> 并行执行，而不是逐个 await</li>
-          <li><strong>forEach 陷阱</strong>：<code>forEach</code> 不支持 async/await，应使用 <code>for...of</code> 或 <code>Promise.all + map</code></li>
-          <li><strong>顶层 await</strong>：ES2022 支持在模块顶层使用 await，但仅限于 ESM</li>
-        </ul>
-        <p>理解这些演进历程，不仅能写出更好的异步代码，还能更好地理解各种库和框架的设计思想。</p>
-      `
-    },
-    'learning-path': {
-      title: '我的前端学习之路',
-      date: '2025-05-08',
-      tags: ['感悟', '笔记'],
-      author: '片片公子',
-      readTime: '约 6 分钟',
-      content: `
-        <p>从大一开始接触前端到现在，已经过去两年多了。这篇文章算是给自己的一个阶段性总结，也希望能给初学前端的同学一些参考。</p>
-
-        <h2>入门：HTML + CSS</h2>
-        <p>最开始是在 B 站看视频教程，跟着敲了几个静态页面。印象最深的是用纯 CSS 画了一只皮卡丘——虽然现在看来很粗糙，但那时候真的很有成就感。</p>
-        <p>这个阶段最重要的是<strong>建立信心</strong>。不用纠结记不住所有标签和属性，多用就会慢慢记住。</p>
-
-        <h2>进阶：JavaScript</h2>
-        <p>学完 HTML/CSS 后，发现只会写静态页面根本不够。于是开始啃 JavaScript——这才是真正的编程语言。</p>
-        <p>DOM 操作、事件处理、闭包、原型链……一开始确实很吃力。我的方法是：<strong>每个知识点都写一个小 demo</strong>，不只看教程，更要动手敲代码。</p>
-
-        <h2>工程化：框架与工具</h2>
-        <p>接触 React 后，才真正理解了组件化开发的思想。配合 Webpack、ESLint、Prettier 这些工具，整个开发体验完全不同了。</p>
-        <p>后来又学了 Vue 和一点点 Node.js。虽然不是每个框架都精通，但<strong>理解不同的设计理念</strong>本身就是很宝贵的收获。</p>
-
-        <h2>一些建议</h2>
-        <ul>
-          <li>不要追求「看完教程」，要追求「能做出东西」</li>
-          <li>尽早开始做个人项目，哪怕是简单的 Todo App</li>
-          <li>善用 MDN 文档，比百度搜索靠谱得多</li>
-          <li>加入技术社区，看别人的代码也是学习</li>
-          <li>保持好奇心，技术更新很快，但基础原理变化不大</li>
-        </ul>
-        <p>前端的路还很长，继续加油 💪</p>
-      `
-    },
-    'git-workflow': {
-      title: 'Git 团队协作工作流实践',
-      date: '2025-05-30',
-      tags: ['开发', '笔记'],
-      author: '片片公子',
-      readTime: '约 10 分钟',
-      content: `
-        <p>Git 是现代软件开发中不可或缺的版本控制工具。但在团队协作中，仅会 commit/push/pull 是不够的，选择合适的工作流同样重要。</p>
-
-        <h2>Git Flow — 经典的分支模型</h2>
-        <p>Git Flow 定义了严格的分支角色：</p>
-        <ul>
-          <li><strong>main</strong> — 生产环境代码</li>
-          <li><strong>develop</strong> — 开发主干，所有 feature 分支合并到这里</li>
-          <li><strong>feature/*</strong> — 功能分支，从 develop 分出，完成后合并回去</li>
-          <li><strong>release/*</strong> — 发布分支，从 develop 分出，测试后合并到 main 和 develop</li>
-          <li><strong>hotfix/*</strong> — 紧急修复，从 main 分出，修复后合并回 main 和 develop</li>
-        </ul>
-        <p>Git Flow 适合<strong>有明确发布周期</strong>的项目，流程严谨但相对复杂。</p>
-
-        <h2>GitHub Flow — 简单即美</h2>
-        <p>相比 Git Flow，GitHub Flow 简单得多：</p>
-        <ol>
-          <li>从 main 创建 feature 分支</li>
-          <li>在 feature 分支上开发和提交</li>
-          <li>发起 Pull Request，团队 review</li>
-          <li>合并到 main 并立即部署</li>
-        </ol>
-        <p>适合<strong>持续部署</strong>的项目，流程简单，但要求完善的自动化测试和 CI/CD。</p>
-
-        <h2>Trunk-Based Development</h2>
-        <p>所有开发者直接在同一个分支（trunk/main）上工作，功能通过 Feature Flag 控制。分支生命周期很短（通常不超过一天），强调频繁的小批量提交。</p>
-        <p>Google 和 Facebook 等大厂采用这种模式，但需要非常成熟的测试基础设施。</p>
-
-        <h2>实战建议</h2>
-        <p>对于多数小团队，我推荐 <strong>简化版的 GitHub Flow</strong>：</p>
-        <ul>
-          <li>main 分支始终可部署</li>
-          <li>功能分支命名规范：<code>feat/描述</code>、<code>fix/描述</code></li>
-          <li>提交信息遵循 Conventional Commits 规范</li>
-          <li>合并前必须通过 CI 检查</li>
-          <li>使用 Squash Merge 保持 main 分支历史清爽</li>
-        </ul>
-        <p>选择工作流的关键是<strong>匹配团队的规模和交付节奏</strong>，没有银弹。</p>
-      `
-    }
-  };
+  var articleContents = BlogData.contents;
 
   function loadArticleContent() {
     const container = $('#articleContent');
@@ -596,14 +383,30 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
     document.body.dataset.articleId = id;
     document.title = article.title + ' - 片片公子';
 
+    // 动态计算阅读时长
+    var computedReadTime = calcReadTime(article.content);
+
     titleEl.textContent = article.title;
     metaEl.innerHTML = `
       + ${article.date} &nbsp;|&nbsp;
       旅人: ${article.author} &nbsp;|&nbsp;
-      ~ ${article.readTime} ~ &nbsp;|&nbsp;
-      ${article.tags.map(t => `<span class="tag"># ${t}</span>`).join(' ')}
+      ~ ${computedReadTime} ~ &nbsp;|&nbsp;
+      ${article.tags.map(function(t) { return '<span class="tag"># ' + t + '</span>'; }).join(' ')}
     `;
     container.innerHTML = article.content;
+
+    // 动态更新 OG 标签
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', article.title + ' - 片片公子');
+    var ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) {
+      var tempDiv = document.createElement('div');
+      tempDiv.innerHTML = article.content;
+      var firstP = tempDiv.querySelector('p');
+      if (firstP) ogDesc.setAttribute('content', firstP.textContent.substring(0, 160));
+    }
+    var ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', window.location.href);
 
     // 设置上一篇/下一篇导航
     setupArticleNav(articleId);
@@ -687,7 +490,29 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
 
   // ════════════════════════════════════════════════════════
   // ════════════════════════════════════════════════════════
-  //  13. 天际飞鸟（白日可见）
+  //  13a. 天体星辰环绕（暗夜可见）
+  // ════════════════════════════════════════════════════════
+  function initCelestialParticles() {
+    var body = document.querySelector('.celestial-body');
+    if (!body) return;
+    var container = document.createElement('div');
+    container.className = 'celestial-particles';
+    for (var i = 0; i < 8; i++) {
+      var angle = (i / 8) * Math.PI * 2;
+      var radius = 28 + Math.random() * 14;
+      var x = Math.cos(angle) * radius;
+      var y = Math.sin(angle) * radius;
+      var particle = document.createElement('div');
+      particle.className = 'celestial-particle';
+      particle.style.cssText = 'left:' + x.toFixed(0) + 'px;top:' + y.toFixed(0) + 'px;' +
+        '--star-dur:' + (1.5 + Math.random() * 2.5).toFixed(1) + 's;' +
+        '--star-delay:' + (Math.random() * 3).toFixed(1) + 's;';
+      container.appendChild(particle);
+    }
+    body.appendChild(container);
+  }
+
+  //  13b. 天际飞鸟（白日可见）
   // ════════════════════════════════════════════════════════
   function initSkyBirds() {
     var container = document.getElementById('skyBirds');
@@ -703,29 +528,53 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
     container.innerHTML = html;
   }
 
-  //  13. 飘落翠叶
+  //  14. 精灵光点生成
+  // ════════════════════════════════════════════════════════
+  function generateFireflies() {
+    var container = document.getElementById('fireflies');
+    if (!container) return;
+    var html = '';
+    var easings = ['ease-in-out', 'ease', 'ease-in', 'ease-out', 'cubic-bezier(0.34,1.56,0.64,1)'];
+    for (var i = 0; i < 28; i++) {
+      var waveAmp = (12 + Math.random() * 40).toFixed(0);
+      var peak = (0.6 + Math.random() * 0.4).toFixed(2);
+      html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
+        (Math.random()*90).toFixed(1) + '%;--dur:' + (2.5+Math.random()*6).toFixed(1) +
+        's;--delay:' + (Math.random()*7).toFixed(1) + 's;' +
+        '--wave-amp:' + waveAmp + 'px;' +
+        '--peak-opacity:' + peak + ';' +
+        '--easing:' + easings[Math.floor(Math.random() * easings.length)] + ';"></div>';
+    }
+    container.innerHTML = html;
+  }
+
+  //  15. 飘落翠叶
   // ════════════════════════════════════════════════════════
   function initFallingLeaves() {
     var container = document.createElement('div');
     container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:995;';
     document.body.appendChild(container);
-    for (var i = 0; i < 10; i++) {
+    var easings = ['linear', 'ease', 'ease-in-out', 'cubic-bezier(0.4,0,0.2,1)'];
+    for (var i = 0; i < 12; i++) {
       var leaf = document.createElement('div');
       leaf.className = 'falling-leaf';
       var left = (Math.random() * 96).toFixed(1);
-      var dur = (8 + Math.random() * 14).toFixed(1);
-      var delay = (Math.random() * 16).toFixed(1);
-      var drift = ((Math.random() - 0.5) * 160).toFixed(0);
+      var dur = (9 + Math.random() * 14).toFixed(1);
+      var delay = (Math.random() * 18).toFixed(1);
+      var drift = ((Math.random() - 0.5) * 200).toFixed(0);
       var spin = (360 + Math.random() * 720).toFixed(0);
-      var size = (6 + Math.random() * 8).toFixed(0);
+      var size = (7 + Math.random() * 10).toFixed(0);
+      var swayDur = (2.5 + Math.random() * 4).toFixed(1);
       leaf.style.cssText = 'left:' + left + '%;top:-20px;';
-      leaf.innerHTML = '<div class="leaf-inner" style="--fall-dur:' + dur + 's;--fall-delay:-' + delay + 's;--drift:' + drift + 'px;--spin:' + spin + 'deg;width:' + size + 'px;height:' + size + 'px;"></div>';
+      leaf.innerHTML = '<div class="leaf-inner" style="--fall-dur:' + dur + 's;--fall-delay:-' + delay +
+        's;--drift:' + drift + 'px;--spin:' + spin + 'deg;--leaf-size:' + size + 'px;' +
+        '--sway-dur:' + swayDur + 's;--fall-easing:' + easings[Math.floor(Math.random() * easings.length)] + ';"></div>';
       container.appendChild(leaf);
     }
   }
 
   // ════════════════════════════════════════════════════════
-  //  14. TOC 滚动高亮
+  //  16. TOC 滚动高亮
   // ════════════════════════════════════════════════════════
   function initTOCSpy() {
     var tocLinks = $$('.toc-list a');
@@ -745,7 +594,7 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
 
 
   // ════════════════════════════════════════════════════════
-  //  15. 页面切换
+  //  17. 页面切换
   // ════════════════════════════════════════════════════════
   function switchPage(page) {
     $$('.nav-link').forEach(function(l) { l.classList.remove('active'); });
@@ -761,7 +610,7 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
       if (sidebar) sidebar.style.display = '';
     } else {
       if (main) main.style.display = 'none';
-      var map = { categories: 'page-categories', about: 'page-about', contact: 'page-contact' };
+      var map = { categories: 'page-categories', about: 'page-about', archive: 'page-archive', contact: 'page-contact' };
       var sec = document.getElementById(map[page]);
       if (sec) sec.classList.add('active');
       
@@ -770,7 +619,203 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
 
 
   // ════════════════════════════════════════════════════════
-  //  11. 初始化入口
+  //  18. 代码块复制按钮
+  // ════════════════════════════════════════════════════════
+  function initCodeCopyButtons() {
+    var pres = document.querySelectorAll('.article-content pre');
+    pres.forEach(function(pre) {
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.textContent = '[ 复制 ]';
+      btn.addEventListener('click', function() {
+        var code = pre.querySelector('code');
+        var text = code ? code.textContent : pre.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = '[ 已复制 ]';
+          setTimeout(function() { btn.textContent = '[ 复制 ]'; }, 2000);
+        }).catch(function() {
+          btn.textContent = '[ 失败 ]';
+          setTimeout(function() { btn.textContent = '[ 复制 ]'; }, 2000);
+        });
+      });
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  19. 键盘快捷键
+  // ════════════════════════════════════════════════════════
+  function initKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+      // 忽略输入框中的按键
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+      // '/' 聚焦搜索
+      if (e.key === '/' && document.body.dataset.page === 'home') {
+        e.preventDefault();
+        var searchInput = document.getElementById('searchInput');
+        if (searchInput) searchInput.focus();
+      }
+
+      // 't' 切换主题
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        var toggle = document.getElementById('themeToggle');
+        if (toggle) toggle.click();
+      }
+
+      // 'Escape' 关闭菜单 / 清除搜索
+      if (e.key === 'Escape') {
+        var navList = document.getElementById('navList');
+        var hamburger = document.getElementById('hamburger');
+        if (navList && navList.classList.contains('open')) {
+          navList.classList.remove('open');
+          if (hamburger) hamburger.classList.remove('active');
+        }
+        var searchInput = document.getElementById('searchInput');
+        if (searchInput && document.activeElement === searchInput) {
+          searchInput.blur();
+        }
+      }
+    });
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  20. 搜索结果高亮
+  // ════════════════════════════════════════════════════════
+  function highlightSearch(keyword) {
+    if (!keyword || keyword.length === 0) return;
+    var cards = document.querySelectorAll('.article-excerpt, .article-title a');
+    cards.forEach(function(el) {
+      var text = el.innerHTML;
+      // 只高亮文本节点（简单实现）
+      var escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var regex = new RegExp('(' + escaped + ')', 'gi');
+      // 避免高亮已存在的 mark 标签
+      if (!el.querySelector('mark')) {
+        el.innerHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+      }
+    });
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  21. 文章归档时间线
+  // ════════════════════════════════════════════════════════
+  function renderTimeline() {
+    var container = document.getElementById('timelineContainer');
+    if (!container) return;
+    var articles = BlogData.articles.slice().sort(function(a, b) {
+      return b.date.localeCompare(a.date);
+    });
+    var years = {};
+    articles.forEach(function(a) {
+      var y = a.date.substring(0, 4);
+      if (!years[y]) years[y] = [];
+      years[y].push(a);
+    });
+    var html = '';
+    Object.keys(years).sort().reverse().forEach(function(year) {
+      html += '<div class="timeline-year"><h3 class="timeline-year-title">' + year + ' 年</h3>';
+      years[year].forEach(function(a) {
+        html += '<div class="timeline-item"><span class="timeline-date">' + a.date + '</span>' +
+          '<a href="' + a.url + '" class="timeline-link">' + escapeHtml(a.title) + '</a>' +
+          '<span class="timeline-tags">' + a.tags.map(function(t) { return '<span class="tag"># ' + t + '</span>'; }).join(' ') + '</span></div>';
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html || '<p style="text-align:center;color:var(--text-muted);">* 年轮尚在描画中...</p>';
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  22a. 按钮点击涟漪
+  // ════════════════════════════════════════════════════════
+  function initButtonRipple() {
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.read-more, .comment-submit, .filter-btn, .share-btn, .contact-qq-btn');
+      if (!btn) return;
+      var ripple = document.createElement('span');
+      ripple.className = 'btn-ripple';
+      var rect = btn.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height);
+      ripple.style.cssText = 'width:' + size + 'px;height:' + size + 'px;' +
+        'left:' + (e.clientX - rect.left - size/2) + 'px;' +
+        'top:' + (e.clientY - rect.top - size/2) + 'px;';
+      btn.style.position = btn.style.position || 'relative';
+      btn.style.overflow = btn.style.overflow || 'hidden';
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', function() { ripple.remove(); });
+    });
+  }
+
+  //  22b. 卡片 3D 倾斜悬停（仅桌面端）
+  // ════════════════════════════════════════════════════════
+  function initCardTilt() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var cards = document.querySelectorAll('.article-card, .project-card, .widget');
+    cards.forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var centerX = rect.width / 2;
+        var centerY = rect.height / 2;
+        var rotateX = ((y - centerY) / centerY) * -4;
+        var rotateY = ((x - centerX) / centerX) * 4;
+        card.style.transform = 'perspective(800px) rotateX(' + rotateX.toFixed(1) + 'deg) rotateY(' + rotateY.toFixed(1) + 'deg) translateY(-3px)';
+        card.style.transition = 'transform 0.1s ease-out, box-shadow 0.25s ease, border-color 0.25s ease';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.25s ease, border-color 0.25s ease';
+      });
+    });
+  }
+
+  //  22c. 主题切换粒子爆发
+  // ════════════════════════════════════════════════════════
+  function initThemeBurst() {
+    var toggle = document.getElementById('themeToggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', function(e) {
+      var count = 14;
+      for (var i = 0; i < count; i++) {
+        var particle = document.createElement('div');
+        particle.className = 'theme-particle';
+        var angle = (i / count) * Math.PI * 2;
+        var dist = 30 + Math.random() * 50;
+        var size = 3 + Math.random() * 5;
+        particle.style.cssText =
+          '--tx:' + (Math.cos(angle) * dist).toFixed(0) + 'px;' +
+          '--ty:' + (Math.sin(angle) * dist).toFixed(0) + 'px;' +
+          '--p-size:' + size + 'px;' +
+          '--p-color:' + (i % 3 === 0 ? '#ffe890' : i % 3 === 1 ? '#80e8c0' : '#60e0ff') + ';' +
+          'left:' + e.clientX + 'px;top:' + e.clientY + 'px;';
+        document.body.appendChild(particle);
+        particle.addEventListener('animationend', function() { particle.remove(); });
+      }
+    });
+  }
+
+  //  23. 文章分享按钮
+  // ════════════════════════════════════════════════════════
+  function initShareButtons() {
+    var btn = document.getElementById('copyLinkBtn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        btn.textContent = '[ 链接已复制 ]';
+        setTimeout(function() { btn.textContent = '[ 复制卷轴链接 ]'; }, 2000);
+      }).catch(function() {
+        btn.textContent = '[ 复制失败 ]';
+        setTimeout(function() { btn.textContent = '[ 复制卷轴链接 ]'; }, 2000);
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  23. 初始化入口
   // ════════════════════════════════════════════════════════
   function init() {
     /* 所有页面共用 */
@@ -780,14 +825,26 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
     initBackToTop();
     initNavHighlight();
     initCursorSparkles();
+    initCelestialParticles();
     initSkyBirds();
     initFallingLeaves();
+    generateFireflies();
+    initKeyboardShortcuts();
+    initButtonRipple();
+    initThemeBurst();
+
+    // 注册 Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
 
     var page = document.body.dataset.page;
     if (page === 'home') {
       renderArticles(articleData);
       initSearch();
       initRevealOnScroll();
+      renderTimeline();
+      setTimeout(function() { initCardTilt(); }, 200);
       // 处理从其他页面带来的 hash 定位（如 index.html#categories）
       if (window.location.hash) {
         var hash = window.location.hash.replace('#', '');
@@ -800,10 +857,13 @@ java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
     if (page === 'article') {
       loadArticleContent();
       initComments();
+      initShareButtons();
       setTimeout(function() {
         initRevealOnScroll();
         initTOCSpy();
-      }, 100);
+        initCodeCopyButtons();
+        initCardTilt();
+      }, 150);
     }
   }
 

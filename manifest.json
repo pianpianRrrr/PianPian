@@ -1,0 +1,16 @@
+{
+  "name": "片片公子 · 精灵森林博客",
+  "short_name": "片片公子",
+  "description": "记录技术学习、开发笔记与生活感悟的精灵森林",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1a10",
+  "theme_color": "#30c870",
+  "icons": [
+    {
+      "src": "avatar.jpg",
+      "sizes": "72x72",
+      "type": "image/jpeg"
+    }
+  ]
+}

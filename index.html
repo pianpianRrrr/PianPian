@@ -5,10 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="片片公子的个人博客 — 记录技术学习、开发笔记与生活感悟">
   <meta name="keywords" content="个人博客,技术分享,学习笔记,前端开发">
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="片片公子">
+  <meta property="og:description" content="记录技术学习、开发笔记与生活感悟">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.pianpian123.top/">
+  <meta property="og:image" content="https://www.pianpian123.top/avatar.jpg">
+  <meta name="twitter:card" content="summary">
   <title>片片公子</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a1a10">
+  <link rel="alternate" type="application/atom+xml" title="片片公子" href="/feed.xml">
   <link rel="stylesheet" href="style.css">
+  <!-- JSON-LD 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "片片公子",
+    "description": "记录技术学习、开发笔记与生活感悟",
+    "url": "https://www.pianpian123.top/",
+    "author": { "@type": "Person", "name": "片片公子" }
+  }
+  </script>
 </head>
 <body data-page="home">
+
+  <!-- 跳过导航 -->
+  <a href="#main-content" class="skip-link">跳过导航，直达内容</a>
 
   <!-- 天穹星体：月亮/太阳（在导航栏下方） -->
   <div class="celestial-body"></div>
@@ -59,7 +86,7 @@
         </div>
         <div class="tree-fairy"></div>
       </div>
-      <img src="avatar.jpg" alt="纹章" class="avatar">
+      <img src="avatar.jpg" alt="纹章" class="avatar" loading="lazy">
       <h1 class="blog-title">片片公子</h1>
       <p class="blog-subtitle">~ 记录 · 分享 · 沉淀 ~</p>
     </div>
@@ -76,18 +103,19 @@
         <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link" data-page="article">[ 知识古树 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="archive">[ 翠叶年轮 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="contact">[ 风之信使 ]</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- 主体 -->
-  <main class="container blog-main">
+  <main class="container blog-main" id="main-content">
     <section class="articles">
       <div class="search-section">
         <div class="search-wrapper">
           <span class="icon">*</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="在翠叶间寻找卷轴..." autocomplete="off">
+          <input type="text" class="search-input" id="searchInput" placeholder="在翠叶间寻找卷轴..." autocomplete="off" aria-label="搜索文章">
         </div>
         <div class="filter-tags" id="filterTags"></div>
       </div>
@@ -108,8 +136,10 @@
         <h3 class="widget-title">[ 卷轴分类 ]</h3>
         <ul class="widget-list">
           <li><a href="#" data-tag-filter="开发">* 开发技艺</a></li>
+          <!--
           <li><a href="#" data-tag-filter="笔记">* 旅人笔记</a></li>
           <li><a href="#" data-tag-filter="感悟">* 古树低语</a></li>
+          -->
           <li><a href="#" data-tag-filter="游戏">* 幻境探索</a></li>
         </ul>
       </div>
@@ -118,8 +148,10 @@
         <h3 class="widget-title">[ 精灵符文 ]</h3>
         <div class="tag-cloud">
           <span class="tag" data-tag="开发"># 开发</span>
+          <!--
           <span class="tag" data-tag="笔记"># 笔记</span>
           <span class="tag" data-tag="感悟"># 感悟</span>
+          -->
           <span class="tag" data-tag="游戏"># 游戏</span>
         </div>
       </div>
@@ -139,6 +171,7 @@
         <p>从零搭建Minecraft服务器全过程记录，含Java配置与插件推荐</p>
         <span class="tag"># 游戏</span><span class="tag"># 开发</span>
       </div>
+      <!--
       <div class="project-card">
         <div class="project-icon">JS</div>
         <h3>JavaScript 异步编程</h3>
@@ -157,6 +190,7 @@
         <p>Git Flow / GitHub Flow / Trunk-Based 分支策略对比</p>
         <span class="tag"># 开发</span><span class="tag"># 笔记</span>
       </div>
+      -->
       <div class="project-card">
         <div class="project-icon">??</div>
         <h3>更多卷轴即将揭晓</h3>
@@ -189,6 +223,15 @@
     </div>
   </section>
 
+  <!-- ══ 翠叶年轮 — 文章归档 ══ -->
+  <section class="container page-section" id="page-archive">
+    <div class="section-header">
+      <h2 class="section-title">[ 翠叶年轮 ]</h2>
+      <p class="section-desc">* 时光在古树的年轮上留下痕迹，每一圈都是一段旅程</p>
+    </div>
+    <div class="timeline" id="timelineContainer"></div>
+  </section>
+
   <!-- ══ 风之信使 — 联系方式 ══ -->
   <section class="container page-section" id="page-contact">
     <div class="section-header">
@@ -197,7 +240,7 @@
     </div>
     <div class="contact-simple">
       <p class="contact-qq-num">QQ 1240778501</p>
-      <a href="tencent://message/?uin=1240778501" class="contact-qq-btn">[ 发起会话 ]</a>
+      <a href="tencent://message/?uin=1240778501" class="contact-qq-btn" rel="noopener noreferrer">[ 发起会话 ]</a>
     </div>
   </section>
 
@@ -227,20 +270,8 @@
     </div>
   </footer>
 
+  <script src="utils.js"></script>
+  <script src="article-data.js"></script>
   <script src="script.js"></script>
-  <script>
-    // 生成精灵光点
-    (function() {
-      var container = document.getElementById('fireflies');
-      if (!container) return;
-      var html = '';
-      for (var i = 0; i < 25; i++) {
-        html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
-          (Math.random()*90).toFixed(1) + '%;--dur:' + (2+Math.random()*5).toFixed(1) +
-          's;--delay:' + (Math.random()*6).toFixed(1) + 's;"></div>';
-      }
-      container.innerHTML = html;
-    })();
-  </script>
 </body>
 </html>

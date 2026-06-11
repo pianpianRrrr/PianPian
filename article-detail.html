@@ -5,10 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="片片公子的文章 — 技术分享与学习笔记">
   <meta name="keywords" content="技术文章,博客,学习笔记">
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="古老卷轴 - 片片公子">
+  <meta property="og:description" content="技术分享与学习笔记">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.pianpian123.top/article-detail.html">
+  <meta property="og:image" content="https://www.pianpian123.top/avatar.jpg">
+  <meta name="twitter:card" content="summary">
   <title>古老卷轴 - 片片公子</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a1a10">
+  <link rel="alternate" type="application/atom+xml" title="片片公子" href="/feed.xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="article">
+
+  <!-- 跳过导航 -->
+  <a href="#main-content" class="skip-link">跳过导航，直达内容</a>
 
   <!-- 天穹星体：月亮/太阳（在导航栏下方） -->
   <div class="celestial-body"></div>
@@ -59,7 +75,7 @@
         </div>
         <div class="tree-fairy"></div>
       </div>
-      <img src="avatar.jpg" alt="纹章" class="avatar">
+      <img src="avatar.jpg" alt="纹章" class="avatar" loading="lazy">
       <h1 class="blog-title">片片公子</h1>
     </div>
   </header>
@@ -75,18 +91,22 @@
         <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link active" data-page="article">[ 知识古树 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="archive">[ 翠叶年轮 ]</a></li>
         <li class="nav-item"><a href="#" class="nav-link" data-page="contact">[ 风之信使 ]</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- 古老卷轴 -->
-  <main class="container">
+  <main class="container" id="main-content">
     <div id="tocContainer"></div>
 
     <div class="article-detail">
       <h1 id="articleDetailTitle">LOADING...</h1>
       <div class="meta" id="articleDetailMeta"></div>
+      <div class="article-share">
+        <button class="share-btn" id="copyLinkBtn" title="复制链接">[ 复制卷轴链接 ]</button>
+      </div>
       <div class="article-content" id="articleContent"></div>
     </div>
 
@@ -106,9 +126,9 @@
 
       <form class="comment-form" id="commentForm">
         <div class="form-row">
-          <input type="text" id="commentAuthor" placeholder="旅人，请留下你的名字" maxlength="30" autocomplete="off">
+          <input type="text" id="commentAuthor" placeholder="旅人，请留下你的名字" maxlength="30" autocomplete="off" aria-label="你的名字">
         </div>
-        <textarea id="commentBody" placeholder="在此留下你的思绪..." maxlength="500"></textarea>
+        <textarea id="commentBody" placeholder="在此留下你的思绪..." maxlength="500" aria-label="评论内容"></textarea>
         <button type="submit" class="comment-submit">[ 刻入翠叶 ]</button>
       </form>
 
@@ -142,19 +162,8 @@
     </div>
   </footer>
 
+  <script src="utils.js"></script>
+  <script src="article-data.js"></script>
   <script src="script.js"></script>
-  <script>
-    (function() {
-      var container = document.getElementById('fireflies');
-      if (!container) return;
-      var html = '';
-      for (var i = 0; i < 25; i++) {
-        html += '<div class="firefly" style="left:' + (Math.random()*95).toFixed(1) + '%;top:' +
-          (Math.random()*90).toFixed(1) + '%;--dur:' + (2+Math.random()*5).toFixed(1) +
-          's;--delay:' + (Math.random()*6).toFixed(1) + 's;"></div>';
-      }
-      container.innerHTML = html;
-    })();
-  </script>
 </body>
 </html>
