@@ -1,0 +1,263 @@
+a,button {
+  transition:background-color var(--fast) ease,color var(--fast) ease,border-color var(--fast) ease,transform var(--normal) var(--ease)
+}
+.toast {
+  transition:opacity var(--fast),transform var(--normal) var(--ease)
+}
+.article-card {
+  transition:border-color var(--normal),transform var(--normal) var(--ease)
+}
+.forest-frame>img {
+  animation:forest-arrive 1.1s var(--ease) both
+}
+.hero-copy {
+  animation:page-in .65s var(--ease) both
+}
+.motes {
+  position:absolute;
+  inset:0;
+  pointer-events:none
+}
+.motes i {
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:#deebad;
+  border-radius:50%;
+  box-shadow:0 0 9px #cfdf8d;
+  animation:drift 7s ease-in-out infinite
+}
+.motes i:nth-child(1) {
+  left:20%;
+  top:45%
+}
+.motes i:nth-child(2) {
+  left:65%;
+  top:28%;
+  animation-delay:-2s
+}
+.motes i:nth-child(3) {
+  left:78%;
+  top:64%;
+  animation-delay:-4s
+}
+.motes i:nth-child(4) {
+  left:35%;
+  top:70%;
+  animation-delay:-1s
+}
+.motes i:nth-child(5) {
+  left:48%;
+  top:40%;
+  animation-delay:-5s
+}
+.motion-paused * {
+  animation-play-state:paused!important
+}
+.reveal-pending {
+  opacity:0;
+  transform:translateY(16px)
+}
+.reveal-in {
+  animation:page-in .5s var(--ease) both
+}
+@keyframes page-in {
+  from {
+    opacity:0;
+    transform:translateY(14px)
+  }
+  to {
+    opacity:1;
+    transform:translateY(0)
+  }
+}
+@keyframes forest-arrive {
+  from {
+    opacity:.3;
+    transform:scale(1.04)
+  }
+  to {
+    opacity:1;
+    transform:scale(1)
+  }
+}
+@keyframes drift {
+  0%,100% {
+    opacity:.15;
+    transform:translate(0,0)
+  }
+  50% {
+    opacity:.85;
+    transform:translate(9px,-18px)
+  }
+}
+@media(hover:hover) {
+  .article-card:hover {
+    transform:translateY(-3px);
+    border-color:var(--muted)
+  }
+  a:hover {
+    color:var(--accent)
+  }
+  .primary:hover {
+    background:var(--ink);
+    color:var(--bg);
+    transform:translateY(-2px)
+  }
+  .icon-button:hover,.secondary:hover {
+    background:var(--surface-raised)
+  }
+  .read-link:hover svg {
+    transform:translateX(4px)
+  }
+  .read-link svg {
+    transition:transform var(--normal) var(--ease)
+  }
+}
+button:active,.button:active {
+  transform:scale(.98)
+}
+@media(prefers-reduced-motion:reduce) {
+  html {
+    scroll-behavior:auto
+  }
+  *,*::before,*::after {
+    animation:none!important;
+    transition:none!important
+  }
+  .reveal-pending {
+    opacity:1;
+    transform:none
+  }
+  .motes {
+    display:none
+  }
+}
+
+/* Forest ambience: finite leaf journeys, night fireflies and occasional day birds. */
+.forest-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  transition: opacity 600ms ease;
+}
+body[data-page="article"] .forest-atmosphere { opacity: .5; }
+.ambient-leaf {
+  position: absolute;
+  left: var(--start);
+  top: -28px;
+  animation: leaf-journey var(--duration) linear both;
+}
+.leaf-sway {
+  display: block;
+  animation: leaf-sway var(--sway-duration) ease-in-out infinite alternate;
+}
+.leaf-blade {
+  display: block;
+  position: relative;
+  width: var(--size);
+  height: calc(var(--size) * .55);
+  border-radius: 2px 85% 2px 85%;
+  background: hsl(var(--leaf-hue) 32% 58%);
+  box-shadow: inset 1px 1px 0 #eef2bd55;
+  animation: leaf-tumble calc(var(--sway-duration) * 1.7) ease-in-out infinite alternate;
+}
+.leaf-blade::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  top: 48%;
+  width: 100%;
+  height: 1px;
+  background: #32422370;
+  transform: rotate(24deg);
+  transform-origin: left;
+}
+[data-theme="light"] .leaf-blade { background: hsl(var(--leaf-hue) 34% 37%); }
+.ambient-fireflies { position: absolute; inset: 0; transition: opacity 700ms ease; }
+.ambient-fireflies i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #deedb2;
+  box-shadow: 0 0 12px 3px #c7de8099;
+  animation: ambient-glow var(--glow-duration) var(--glow-delay) ease-in-out infinite;
+}
+[data-theme="light"] .ambient-fireflies { opacity: 0; }
+.ambient-bird {
+  position: absolute;
+  left: -40px;
+  top: var(--altitude);
+  display: flex;
+  opacity: 0;
+  animation: bird-journey var(--duration) var(--delay) linear both;
+}
+.ambient-bird i {
+  width: 9px;
+  height: 5px;
+  border-top: 1.5px solid var(--muted);
+  border-radius: 80% 80% 0 0;
+  transform-origin: right center;
+  animation: bird-wing 800ms ease-in-out infinite alternate;
+}
+.ambient-bird i + i { transform-origin: left center; animation-direction: alternate-reverse; }
+[data-theme="dark"] .ambient-bird { visibility: hidden; }
+.ambient-spark {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: forest-spark 650ms ease-out both;
+}
+.atmosphere-off .motes { display: none; }
+#atmosphereToggle[aria-pressed="true"] { color: var(--accent); }
+#atmosphereToggle[aria-pressed="false"] { color: var(--muted); }
+#atmosphereToggle:disabled { opacity: .45; cursor: default; }
+@keyframes leaf-journey {
+  0% { transform: translate3d(0, -20px, 0) rotate(-20deg); opacity: 0; }
+  8% { opacity: .9; }
+  82% { opacity: .8; }
+  100% { transform: translate3d(var(--drift), calc(100vh + 70px), 0) rotate(var(--turn)); opacity: 0; }
+}
+@keyframes leaf-sway {
+  from { transform: translateX(calc(var(--sway) * -1)) rotate(-24deg); }
+  to { transform: translateX(var(--sway)) rotate(28deg); }
+}
+@keyframes leaf-tumble {
+  from { transform: scaleX(.5) rotate(-15deg); }
+  to { transform: scaleX(1) rotate(30deg); }
+}
+@keyframes ambient-glow {
+  0%, 100% { opacity: 0; transform: translate(0, 5px); }
+  45% { opacity: .95; }
+  65% { opacity: .12; }
+  80% { opacity: .7; transform: translate(var(--wander), -22px); }
+}
+@keyframes bird-journey {
+  0% { transform: translateX(0) translateY(0); opacity: 0; }
+  10%, 85% { opacity: .55; }
+  100% { transform: translateX(calc(100vw + 90px)) translateY(-60px); opacity: 0; }
+}
+@keyframes bird-wing {
+  from { transform: rotate(-14deg) scaleY(.6); }
+  to { transform: rotate(14deg) scaleY(1); }
+}
+@keyframes forest-spark {
+  from { opacity: .85; transform: translate(0, 0) scale(1); }
+  to { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forest-atmosphere { display: none; }
+}
+@media (min-width: 641px) and (max-width: 850px) {
+  .header-inner { gap: 14px; }
+  .header-inner nav { gap: 12px; }
+  .header-actions { gap: 6px; }
+}

@@ -1,0 +1,205 @@
+/* Pixel forest design system: crisp edges, stepped silhouettes, readable text. */
+:root {
+  --bg: #10221f;
+  --surface: #19342d;
+  --surface-raised: #24473a;
+  --ink: #eff2d8;
+  --muted: #b0c5af;
+  --accent: #d1df91;
+  --line: #4b6950;
+  --pixel-shadow: #081511;
+  --pixel-edge: #8cae6c;
+  --radius: 0px;
+}
+:root[data-theme="light"] {
+  --bg: #f0efda;
+  --surface: #e3e8ce;
+  --surface-raised: #f9f8e8;
+  --ink: #213b2d;
+  --muted: #506845;
+  --accent: #476330;
+  --line: #9ea982;
+  --pixel-shadow: #b6c09a;
+  --pixel-edge: #788d58;
+}
+.brand, .hero h1, .section-heading h2, .page-heading h1, .article-card h3,
+.profile-card h2, .forest-caption p, .article-heading h1, .footer-brand {
+  font-family: var(--mono), "Microsoft YaHei", sans-serif;
+  font-weight: 700;
+}
+.hero h1 { font-size: clamp(32px, 3.3vw, 48px); line-height: 1.6; letter-spacing: 2px; }
+.hero h1 span { text-shadow: 3px 3px 0 var(--pixel-shadow); }
+[data-theme="light"] .hero h1 span { text-shadow: 2px 2px 0 #c3cba2; }
+.brand-mark { border-radius: 0; border-width: 2px; box-shadow: 3px 3px 0 var(--pixel-shadow); }
+.brand small { letter-spacing: 2px; }
+.site-header { backdrop-filter: none; border-bottom: 2px solid var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); }
+.icon-button { border-radius: 0; border: 2px solid var(--line); box-shadow: 2px 2px 0 var(--pixel-shadow); }
+.icon-button svg { shape-rendering: crispEdges; }
+.button, .tree-awaken {
+  position: relative;
+  border-radius: 0;
+  border: 2px solid var(--pixel-edge);
+  box-shadow: 4px 4px 0 var(--pixel-shadow), inset 2px 2px 0 #ffffff25;
+  letter-spacing: 1px;
+  transition: transform 120ms steps(3), box-shadow 120ms steps(3), background-color 160ms;
+}
+.button:active, .tree-awaken:active, .icon-button:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 var(--pixel-shadow); }
+.primary { background: #d1df91; color: #193020; border-color: #e5edbb; }
+[data-theme="light"] .primary { background: #476330; color: #fffde8; border-color: #6f8547; }
+.status-dot { border-radius: 0; box-shadow: 3px 0 0 #a8cb6955; }
+nav a[aria-current="page"]:after { border-radius: 0; width: 6px; height: 6px; }
+.eyebrow { letter-spacing: 1.5px; }
+.hero-copy > .eyebrow { display: inline-flex; align-items: center; border: 1px solid var(--line); padding: 6px 10px; background: color-mix(in srgb, var(--bg) 88%, transparent); color: var(--accent); }
+.world-tree-scene, .world-tree-canopy { image-rendering: pixelated; }
+.world-tree-scene { animation: pixel-tree-breathe 16s steps(24) infinite alternate; }
+.world-tree-canopy { animation: pixel-canopy-sway 10s steps(18) infinite alternate; }
+.world-tree-veil { background: linear-gradient(90deg, #10221fe0 0%, #10221f99 34%, #10221f20 70%, #10221f40), linear-gradient(0deg, #10221f99, transparent 55%); }
+.forest-caption { border-radius: 0; border: 2px solid #829e65; background: #10271ee6; box-shadow: 5px 5px 0 #06191099, inset 0 0 0 3px #10271e; backdrop-filter: none; padding: 18px 22px; }
+.forest-caption::before, .forest-caption::after { content: ''; position: absolute; width: 6px; height: 6px; background: #d1df91; top: -4px; }
+.forest-caption::before { left: -4px; }
+.forest-caption::after { right: -4px; }
+.forest-caption p { font-size: 21px; }
+.tree-awaken { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 42px; padding: 8px 12px; margin-top: 16px; color: #e8edc8; background: #294b36; font-size: 12px; }
+.tree-awaken > span:first-child { color: #d6e79d; animation: rune-blink 2.4s steps(2) infinite; }
+.journal-main, .inner-page, .profile-card, .article-card, .contact-panel, .aside-note {
+  border-radius: 0;
+  border: 2px solid var(--line);
+  box-shadow: 5px 5px 0 var(--pixel-shadow);
+}
+.journal-main { background: color-mix(in srgb, var(--bg) 91%, transparent); }
+.article-card { background: var(--surface); padding: 26px; }
+.article-card::after { content: ''; position: absolute; right: 0; bottom: 0; width: 8px; height: 8px; background: var(--pixel-edge); box-shadow: -8px 0 0 var(--pixel-shadow), 0 -8px 0 var(--pixel-shadow); }
+.article-card h3 { font-size: 23px; }
+.article-card-number { font: 30px var(--mono); opacity: .3; }
+.profile-top img { border-radius: 0; border: 2px solid var(--pixel-edge); box-shadow: 3px 3px 0 var(--pixel-shadow); image-rendering: pixelated; }
+.profile-top .mono { line-height: 1.7; }
+.tag, .filter-btn, .search-box, .comments input, .comments textarea, .prose pre, .copy-code, .toast, .toc, .site-footer { border-radius: 0; }
+.filter-btn[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--accent); }
+.search-box { border-bottom: 2px solid var(--line); }
+.article-meta, .tag, .read-link, .text-link { letter-spacing: .3px; }
+.section-heading h2 { font-size: 25px; }
+.forest-waypoints { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border: 2px solid var(--line); background: color-mix(in srgb, var(--bg) 93%, transparent); box-shadow: 5px 5px 0 var(--pixel-shadow); margin-bottom: 40px; }
+.forest-waypoints a, .waypoint-label { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; gap: 12px; font: 11px/1.8 var(--mono); color: var(--muted); min-height: 58px; }
+.waypoint-label { justify-content: flex-start; color: var(--accent); }
+.waypoint-label i { width: 6px; height: 6px; background: var(--accent); box-shadow: 0 6px 0 var(--accent), 6px 0 0 var(--accent); transform: rotate(-45deg); }
+.forest-waypoints a { border-left: 1px solid var(--line); }
+.forest-waypoints a span { color: var(--ink); font-family: var(--sans); font-size: 13px; }
+.forest-waypoints a:hover { background: var(--surface); }
+.journal-layout { border-top: 0; padding-top: 0; }
+.leaf-blade { border-radius: 0; clip-path: polygon(0 25%,25% 25%,25% 0,75% 0,75% 25%,100% 25%,100% 75%,75% 75%,75% 100%,25% 100%,25% 75%,0 75%); }
+.ambient-fireflies i, .ambient-spark, .motes i { border-radius: 0; }
+.ambient-fireflies i { box-shadow: 0 0 8px #c7de8066, 4px 0 0 #c7de8033; }
+.ambient-spirit { position: absolute; left: var(--origin-x); top: var(--origin-y); width: 26px; height: 26px; animation: spirit-journey var(--duration) steps(90) both; }
+.spirit-core { position: absolute; width: 8px; height: 10px; top: 8px; left: 9px; background: #edffd1; box-shadow: 0 -3px 0 #edffd1, 3px 0 0 #b2e4af, -3px 0 0 #b2e4af, 0 3px 0 #71b89e; }
+.spirit-core::after { content: ''; position: absolute; left: 1px; top: 3px; width: 2px; height: 2px; background: #315d49; box-shadow: 5px 0 0 #315d49; }
+.spirit-wing { position: absolute; width: 8px; height: 5px; top: 7px; background: #d5f6cbbf; box-shadow: 0 -3px 0 #d5f6cb70; animation: spirit-flutter 260ms steps(2) infinite alternate; }
+.wing-left { left: 0; transform-origin: right; }
+.wing-right { right: 0; transform-origin: left; animation-direction: alternate-reverse; }
+.spirit-tail { position: absolute; left: 12px; top: 26px; width: 3px; height: 3px; background: #dbefa4; box-shadow: -5px 9px 0 #dbefa499, 3px 18px 0 #dbefa444; animation: rune-blink 700ms steps(3) infinite; }
+.pixel-shooting-star { position: absolute; left: var(--star-x); top: var(--star-y); width: 5px; height: 5px; background: #efffcf; box-shadow: -6px -3px 0 #d1e89cbf, -12px -6px 0 #d1e89c80, -18px -9px 0 #d1e89c40, -24px -12px 0 #d1e89c20; animation: pixel-star-crossing 2200ms steps(45) both; }
+.tree-wish-ring { position: absolute; left: 70%; top: 40%; width: 70px; height: 70px; border: 3px solid #e0ed99; box-shadow: 0 0 0 5px #c5e2a130; animation: tree-wish 1500ms steps(20) both; }
+.atmosphere-off .tree-awaken span, .motion-paused .tree-awaken span { animation-play-state: paused; }
+@keyframes pixel-tree-breathe { from { transform: translate(0,0); } to { transform: translate(3px, -3px); } }
+@keyframes pixel-canopy-sway { from { transform: translate(-5px, 0); } to { transform: translate(5px, 3px); } }
+@keyframes rune-blink { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+@keyframes spirit-flutter { from { transform: translateY(-3px) scaleY(.6); } to { transform: translateY(3px) scaleY(1); } }
+@keyframes spirit-journey { 0% { opacity: 0; transform: translate(0,10px); } 12% { opacity: 1; } 38% { transform: translate(-30px,-35px); } 65% { opacity: 1; transform: translate(18px,-65px); } 100% { opacity: 0; transform: translate(var(--journey-x),var(--journey-y)); } }
+@keyframes pixel-star-crossing { 0% { opacity: 0; transform: translate(0,0); } 15% { opacity: .85; } 100% { opacity: 0; transform: translate(190px,100px); } }
+@keyframes tree-wish { from { opacity: .9; transform: translate(-50%,-50%) rotate(45deg) scale(.3); } to { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(2.2); } }
+@media(hover:hover) { .article-card:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--pixel-shadow); } .button:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--pixel-shadow); } }
+@media(max-width:800px) { .forest-waypoints { grid-template-columns: repeat(3,1fr); } .waypoint-label { grid-column: 1/-1; padding-block: 8px; min-height: 36px; border-bottom: 1px solid var(--line); } .forest-waypoints a { padding: 14px 12px; } .hero h1 { font-size: 31px; } }
+@media(max-width:640px) {
+  .hero h1 { font-size: 31px; letter-spacing: 1px; }
+  .hero-copy>.eyebrow { font-size: 9px; letter-spacing: 1px; }
+  .forest-frame { min-height: 240px; }
+  .forest-caption { left: 0; right: 0; bottom: 0; }
+  .forest-caption p { font-size: 20px; }
+  .forest-waypoints a { gap: 6px; padding: 12px 8px; font-size: 9px; }
+  .forest-waypoints a span { font-size: 11px; }
+  .section-heading { gap: 10px; }
+  .section-heading h2 { font-size: 21px; }
+  .article-card { padding: 19px; }
+  .article-card h3 { font-size: 21px; }
+  .article-card-bottom { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .header-inner { gap: 12px; }
+  .brand { gap: 9px; font-size: 15px; }
+  .brand small { font-size: 6px; letter-spacing: 1px; }
+  .brand-mark { width: 34px; height: 38px; }
+  .header-actions { gap: 5px; }
+}
+@media(prefers-reduced-motion:reduce) { .world-tree-scene, .world-tree-canopy, .tree-awaken span { animation: none !important; } }
+
+/* Daylight pollen uses the same bounded particles as the night fireflies. */
+[data-theme="light"] .ambient-fireflies { opacity: .55; }
+[data-theme="light"] .ambient-fireflies i { background: #8d6d23; box-shadow: 3px 0 0 #b39d4d55; }
+
+/* Side-on flight: beak always leads right, tail trails left. Two depth-separated
+   wing silhouettes alternate vertically instead of forming a frontal V. */
+.ambient-bird { display: block; width: 40px; height: 30px; color: #365847; }
+.ambient-bird .side-bird { display: block; width: 40px; height: 30px; overflow: visible; }
+.bird-body { fill: currentColor; }
+.bird-beak { fill: #887139; }
+.bird-eye { fill: #ecedc6; }
+.bird-far-wing { fill: #66816a; animation: bird-far-beat 900ms steps(1) infinite; }
+.bird-near-wing { fill: #29483b; }
+.bird-near-wing.wing-up { animation: bird-side-up 900ms steps(1) infinite; }
+.bird-near-wing.wing-down { animation: bird-side-down 900ms steps(1) infinite; }
+@keyframes bird-side-up { 0%,50% { opacity: 1; } 25%,75% { opacity: 0; } }
+@keyframes bird-side-down { 0%,50% { opacity: 0; } 25%,75% { opacity: 1; } }
+@keyframes bird-far-beat { 0%,50% { transform: translateY(1px); opacity: .6; } 25%,75% { transform: translateY(4px); opacity: .35; } }
+
+/* Ornament belongs to the frame. The central reading/click area stays clear. */
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption) {
+  position: relative;
+  border-color: var(--pixel-edge);
+  box-shadow: 4px 4px 0 var(--pixel-shadow), inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--line);
+}
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before,
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::after {
+  content: '';
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+  z-index: 1;
+  background: url('../assets/pixel-vine-corner.svg') 0 0 / 64px 64px no-repeat;
+  box-shadow: none;
+  image-rendering: pixelated;
+}
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before {
+  inset: 0 auto auto 0;
+}
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::after {
+  inset: auto 0 0 auto;
+  transform: rotate(180deg);
+}
+.button::before,.button::after,.tree-awaken::before,.tree-awaken::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border: 1px solid var(--pixel-shadow);
+  box-shadow: 4px 0 0 var(--pixel-edge),0 4px 0 var(--pixel-edge);
+  pointer-events: none;
+}
+.button::before,.tree-awaken::before { left: -3px; top: -3px; }
+.button::after,.tree-awaken::after { right: -3px; bottom: -3px; transform: rotate(180deg); }
+.primary::before,.primary::after { background: var(--accent-ink); }
+.forest-waypoints { position: relative; border-block: 3px double var(--pixel-edge); }
+.forest-waypoints::before,.forest-waypoints::after {
+  content: ''; position: absolute; width: 6px; height: 6px; top: -4px;
+  background: #ddbd70; box-shadow: -4px 4px 0 var(--pixel-edge),4px 4px 0 var(--pixel-edge),0 8px 0 #ddbd70;
+  pointer-events: none;
+}
+.forest-waypoints::before { left: 12px; }
+.forest-waypoints::after { right: 12px; }
+.profile-bottom { border-top-style: dashed; border-top-width: 2px; }
+.article-card-bottom { border-top-style: dashed; }
+@media(max-width:640px) {
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before,
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::after { width: 48px; height: 48px; background-size: 48px 48px; }
+}
+
+/* The tree caption remains anchored to the hero scene. */
+.forest-caption { position: absolute; }

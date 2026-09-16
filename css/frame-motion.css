@@ -1,0 +1,62 @@
+/* Shared living frames and native feather-quill cursor. */
+.header-frame { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.header-inner { position: relative; z-index: 1; }
+.header-vine { position: absolute; left: 0; width: 100%; height: 16px; background: url('../assets/pixel-header-vine.svg') repeat-x center / 160px 16px; image-rendering: pixelated; animation: frame-leaf-shimmer 5s steps(5) infinite alternate; }
+.vine-top { top: 0; }
+.vine-bottom { bottom: 0; transform: rotate(180deg); animation-delay: -2.5s; }
+.header-rune { position: absolute; top: calc(50% - 3px); width: 6px; height: 6px; background: #d9c37e; box-shadow: 0 -10px 0 var(--pixel-edge),0 10px 0 var(--pixel-edge),-3px -3px 0 #d9c37e66,3px 3px 0 #d9c37e66; animation: frame-rune-glow 3s steps(4) infinite alternate; }
+.rune-left { left: 8px; }
+.rune-right { right: 8px; animation-delay: -1.5s; }
+.header-glimmer { position: absolute; bottom: 1px; width: 64px; height: 3px; left: -64px; background: #e5edb5; box-shadow: -8px 0 0 #c9df8d80,-16px 0 0 #c9df8d40; animation: header-light-journey 14s steps(150) infinite; }
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before,
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::after {
+  animation: frame-leaf-shimmer 5.5s steps(5) infinite alternate;
+}
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::after { animation-delay: -2.75s; }
+:is(.button,.tree-awaken)::before,:is(.button,.tree-awaken)::after,.forest-waypoints::before,.forest-waypoints::after { animation: frame-rune-glow 3.5s steps(4) infinite alternate; }
+:is(.button,.tree-awaken)::after,.forest-waypoints::after { animation-delay: -1.75s; }
+/* Every bordered control gets the same focus/hover response, not only primary CTAs. */
+:is(button,.button,.brand-mark,.tag,.filter-btn,.search-box,.toc,.prose pre,.comments input,.comments textarea,.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption,.forest-waypoints,.site-footer) {
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease, transform 150ms steps(4);
+}
+:is(.search-box,.toc,.prose pre,.comments input,.comments textarea):focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--pixel-edge),3px 3px 0 var(--pixel-shadow);
+}
+button:focus-visible,.button:focus-visible { outline: 2px dashed var(--accent); outline-offset: 5px; }
+button:active,.button:active { transform: translate(2px,2px); }
+button:disabled { transform: none !important; }
+nav a { transition: color 180ms, background-color 180ms, transform 150ms steps(3); }
+nav a[aria-current="page"]::after { animation: frame-rune-glow 2.6s steps(3) infinite alternate; }
+@media(hover:hover) {
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption,.forest-waypoints,.site-footer,.tag,.toc,.prose pre):hover { border-color: var(--accent); }
+  :is(button,.button):not(:disabled):hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 3px 5px 0 var(--pixel-shadow); }
+  :is(button,.button):not(:disabled):active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--pixel-shadow); }
+  .icon-button:not(:disabled):hover svg { animation: quill-control-nod 420ms steps(5) both; }
+  nav a:hover { transform: translateY(-2px); text-shadow: 2px 2px 0 var(--pixel-shadow); }
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption):hover::before,
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption):hover::after { animation-duration: 1.2s; }
+}
+@media(pointer:fine) {
+  html, body, body * { cursor: url('../assets/quill-cursor.svg') 5 43, auto; }
+  a, a *, button, button *, [role="button"], .button, .button *, summary { cursor: url('../assets/quill-active.svg') 5 43, pointer; }
+  input,textarea,[contenteditable="true"],[contenteditable="true"] * { cursor: text; }
+  button:disabled,button:disabled * { cursor: not-allowed; }
+}
+@keyframes frame-leaf-shimmer { from { opacity: .65; } to { opacity: 1; } }
+@keyframes frame-rune-glow { from { opacity: .55; } to { opacity: 1; } }
+@keyframes header-light-journey { 0%,15% { transform: translateX(0); opacity: 0; } 20% { opacity: .9; } 75% { opacity: .9; } 85%,100% { transform: translateX(calc(100vw + 80px)); opacity: 0; } }
+@keyframes quill-control-nod { 0%,100% { transform: rotate(0); } 35% { transform: rotate(-12deg); } 70% { transform: rotate(8deg); } }
+.atmosphere-off .header-frame *, .atmosphere-off nav a::after,
+.atmosphere-off :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption,.button,.tree-awaken,.forest-waypoints)::before,
+.atmosphere-off :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption,.button,.tree-awaken,.forest-waypoints)::after {
+  animation: none !important;
+  opacity: 1;
+}
+.atmosphere-off .header-glimmer { display: none; }
+.motion-paused *::before,.motion-paused *::after { animation-play-state: paused !important; }
+@media(max-width:640px) { .header-vine { height: 10px; background-size: 120px 12px; } .header-rune { width: 4px; height: 4px; } .rune-left { left: 5px; } .rune-right { right: 5px; } }
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation: none !important; transition: none !important; }
+  .header-glimmer { display: none; }
+}

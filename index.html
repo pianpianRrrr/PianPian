@@ -1,277 +1,57 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="片片公子的个人博客 — 记录技术学习、开发笔记与生活感悟">
-  <meta name="keywords" content="个人博客,技术分享,学习笔记,前端开发">
-  <!-- Open Graph / Social -->
-  <meta property="og:title" content="片片公子">
-  <meta property="og:description" content="记录技术学习、开发笔记与生活感悟">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.pianpian123.top/">
-  <meta property="og:image" content="https://www.pianpian123.top/avatar.jpg">
-  <meta name="twitter:card" content="summary">
-  <title>片片公子</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0a1a10">
-  <link rel="alternate" type="application/atom+xml" title="片片公子" href="/feed.xml">
-  <link rel="stylesheet" href="style.css">
-  <!-- JSON-LD 结构化数据 -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "片片公子",
-    "description": "记录技术学习、开发笔记与生活感悟",
-    "url": "https://www.pianpian123.top/",
-    "author": { "@type": "Person", "name": "片片公子" }
-  }
-  </script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="片片公子的林间手记，记录技术探索、开发笔记与生活感悟。"><meta name="keywords" content="片片公子,个人博客,技术分享,开发笔记,Minecraft">
+<meta property="og:title" content="片片公子 · 林间手记"><meta property="og:description" content="在技术的森林里，留下一点自己的足迹。"><meta property="og:type" content="website"><meta property="og:url" content="https://www.pianpian123.top/"><meta property="og:image" content="https://www.pianpian123.top/favicon-384.png"><meta name="twitter:card" content="summary"><meta name="theme-color" content="#111c18">
+<title>片片公子 · 林间手记</title>
+<link rel="icon" href="favicon-384.png"><link rel="apple-touch-icon" href="favicon-384.png"><link rel="manifest" href="manifest.json"><link rel="alternate" type="application/atom+xml" title="片片公子" href="feed.xml">
+<script src="js/theme-init.js"></script><link rel="preload" as="image" href="assets/world-tree-pixel.png"><link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"片片公子","url":"https://www.pianpian123.top/","author":{"@type":"Person","name":"片片公子"}}</script>
+<script defer src="article-data.js"></script><script type="module" src="js/app.js"></script>
 </head>
-<body data-page="home">
-
-  <!-- 跳过导航 -->
-  <a href="#main-content" class="skip-link">跳过导航，直达内容</a>
-
-  <!-- 天穹星体：月亮/太阳（在导航栏下方） -->
-  <div class="celestial-body"></div>
-
-  <!-- 林间雾气 -->
-  <div class="clouds">
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
-  </div>
-
-  <!-- 天际飞鸟（白日） -->
-  <div class="sky-birds" id="skyBirds"></div>
-
-  <!-- 精灵光点 -->
-  <div class="fireflies" id="fireflies"></div>
-
-  <!-- 翡翠光脉进度条 -->
-  <div class="progress-bar" id="progressBar"></div>
-
-  <!-- 精灵符文石 -->
-  <button class="theme-toggle" id="themeToggle" title="切换昼夜" aria-label="切换昼夜"></button>
-
-  <!-- 光羽 -->
-  <button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">^^</button>
-
-  <!-- 头部 -->
-  <header class="blog-header">
-    <div class="container">
-      <!-- 世界古树 — 全幅树冠覆顶 -->
-      <div class="world-tree">
-        <div class="tree-canopy-top">
-          <span class="leaf-cluster lc1"></span>
-          <span class="leaf-cluster lc2"></span>
-          <span class="leaf-cluster lc3"></span>
-          <span class="leaf-cluster lc4"></span>
-          <span class="leaf-cluster lc5"></span>
-          <span class="leaf-cluster lc6"></span>
-          <span class="leaf-cluster lc7"></span>
-          <span class="leaf-cluster lc8"></span>
-        </div>
-
-
-        <div class="tree-sparkles">
-          <span class="sparkle"></span><span class="sparkle"></span>
-          <span class="sparkle"></span><span class="sparkle"></span>
-          <span class="sparkle"></span><span class="sparkle"></span>
-        </div>
-        <div class="tree-fairy"></div>
-      </div>
-      <img src="avatar.jpg" alt="纹章" class="avatar" loading="lazy">
-      <h1 class="blog-title">片片公子</h1>
-      <p class="blog-subtitle">~ 记录 · 分享 · 沉淀 ~</p>
-    </div>
-  </header>
-
-  <!-- 古木枝廊导航 -->
-  <nav class="blog-nav">
-    <div class="container">
-      <button class="hamburger" id="hamburger" aria-label="菜单">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-list" id="navList">
-        <li class="nav-item"><a href="#" class="nav-link active" data-page="home">[ 精灵之庭 ]</a></li>
-        <li class="nav-item"><a href="article-detail.html?id=mc-server" class="nav-link" data-page="article">[ 知识古树 ]</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-page="categories">[ 翠叶藏书 ]</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-page="about">[ 贤者之泉 ]</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-page="archive">[ 翠叶年轮 ]</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-page="contact">[ 风之信使 ]</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- 主体 -->
-  <main class="container blog-main" id="main-content">
-    <section class="articles">
-      <div class="search-section">
-        <div class="search-wrapper">
-          <span class="icon">*</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="在翠叶间寻找卷轴..." autocomplete="off" aria-label="搜索文章">
-        </div>
-        <div class="filter-tags" id="filterTags"></div>
-      </div>
-
-      <div id="articlesContainer"></div>
-    </section>
-
-    <aside class="sidebar">
-      <div class="widget">
-        <h3 class="widget-title">[ 旅人档案 ]</h3>
-        <p>一位漫步在技术森林中的精灵旅人。热爱探索代码的奥秘，偶尔在月光下书写感悟。</p>
-        <p style="margin-top:8px;font-size:0.85rem;color:var(--text-secondary);">
-          * 艾尔泽森林 · 翠叶城
-        </p>
-      </div>
-
-      <div class="widget">
-        <h3 class="widget-title">[ 卷轴分类 ]</h3>
-        <ul class="widget-list">
-          <li><a href="#" data-tag-filter="开发">* 开发技艺</a></li>
-          <!--
-          <li><a href="#" data-tag-filter="笔记">* 旅人笔记</a></li>
-          <li><a href="#" data-tag-filter="感悟">* 古树低语</a></li>
-          -->
-          <li><a href="#" data-tag-filter="游戏">* 幻境探索</a></li>
-        </ul>
-      </div>
-
-      <div class="widget">
-        <h3 class="widget-title">[ 精灵符文 ]</h3>
-        <div class="tag-cloud">
-          <span class="tag" data-tag="开发"># 开发</span>
-          <!--
-          <span class="tag" data-tag="笔记"># 笔记</span>
-          <span class="tag" data-tag="感悟"># 感悟</span>
-          -->
-          <span class="tag" data-tag="游戏"># 游戏</span>
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <!-- ══ 翠叶藏书 — 项目文章 ══ -->
-  <section class="container page-section" id="page-categories">
-    <div class="section-header">
-      <h2 class="section-title">[ 翠叶藏书 ]</h2>
-      <p class="section-desc">* 此间收藏着旅人探索技术森林时留下的每一片翠叶卷轴</p>
-    </div>
-    <div class="project-grid">
-      <div class="project-card">
-        <div class="project-icon">MC</div>
-        <h3>我的世界服务器搭建</h3>
-        <p>从零搭建Minecraft服务器全过程记录，含Java配置与插件推荐</p>
-        <span class="tag"># 游戏</span><span class="tag"># 开发</span>
-      </div>
-      <!--
-      <div class="project-card">
-        <div class="project-icon">JS</div>
-        <h3>JavaScript 异步编程</h3>
-        <p>从回调到 async/await 的异步编程演进之路</p>
-        <span class="tag"># 开发</span><span class="tag"># 笔记</span>
-      </div>
-      <div class="project-card">
-        <div class="project-icon">FE</div>
-        <h3>前端学习之路</h3>
-        <p>两年半前端学习历程的总结与感悟</p>
-        <span class="tag"># 感悟</span><span class="tag"># 笔记</span>
-      </div>
-      <div class="project-card">
-        <div class="project-icon">GT</div>
-        <h3>Git 团队协作实践</h3>
-        <p>Git Flow / GitHub Flow / Trunk-Based 分支策略对比</p>
-        <span class="tag"># 开发</span><span class="tag"># 笔记</span>
-      </div>
-      -->
-      <div class="project-card">
-        <div class="project-icon">??</div>
-        <h3>更多卷轴即将揭晓</h3>
-        <p>新项目正在探索中，敬请期待...</p>
-        <span class="tag"># 预告</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 贤者之泉 — 像素喷泉 ══ -->
-  <section class="container page-section" id="page-about">
-    <div class="section-header">
-      <h2 class="section-title">[ 贤者之泉 ]</h2>
-      <p class="section-desc">* 古老的魔法泉眼，永不停歇地涌出晶莹水珠</p>
-    </div>
-    <div class="fountain-box">
-      <div class="fountain-pool">
-        <div class="fountain-base"></div>
-        <div class="water-drops">
-          <span class="drop d1"></span><span class="drop d2"></span>
-          <span class="drop d3"></span><span class="drop d4"></span>
-          <span class="drop d5"></span><span class="drop d6"></span>
-          <span class="drop d7"></span><span class="drop d8"></span>
-          <span class="drop d9"></span><span class="drop d10"></span>
-        </div>
-        <div class="pool-ripple r1"></div>
-        <div class="pool-ripple r2"></div>
-        <div class="pool-ripple r3"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 翠叶年轮 — 文章归档 ══ -->
-  <section class="container page-section" id="page-archive">
-    <div class="section-header">
-      <h2 class="section-title">[ 翠叶年轮 ]</h2>
-      <p class="section-desc">* 时光在古树的年轮上留下痕迹，每一圈都是一段旅程</p>
-    </div>
-    <div class="timeline" id="timelineContainer"></div>
-  </section>
-
-  <!-- ══ 风之信使 — 联系方式 ══ -->
-  <section class="container page-section" id="page-contact">
-    <div class="section-header">
-      <h2 class="section-title">[ 风之信使 ]</h2>
-      <p class="section-desc">* 风会将你的消息带给这位森林旅人</p>
-    </div>
-    <div class="contact-simple">
-      <p class="contact-qq-num">QQ 1240778501</p>
-      <a href="tencent://message/?uin=1240778501" class="contact-qq-btn" rel="noopener noreferrer">[ 发起会话 ]</a>
-    </div>
-  </section>
-
-  <div class="text-carousel">
-    <div class="carousel-track">
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">记录生活</div>
-      <div class="carousel-item">分享技术</div>
-      <div class="carousel-item">沉淀成长</div>
-      <div class="carousel-item">欢迎来访</div>
-      <div class="carousel-item">片片公子</div>
-      <div class="carousel-item">记录生活</div>
-      <div class="carousel-item">分享技术</div>
-      <div class="carousel-item">沉淀成长</div>
-      <div class="carousel-item">欢迎来访</div>
-    </div>
-  </div>
-
-  <footer class="blog-footer">
-    <div class="container">
-      <div class="footer-social">
-        <a href="#" title="GitHub" aria-label="GitHub">GH</a>
-        <a href="#" title="邮箱" aria-label="邮箱">@</a>
-        <a href="#" title="RSS" aria-label="RSS">RS</a>
-      </div>
-      <p class="footer-copy">(c) 2025 PianPian :: 在翠叶间，静听代码低语</p>
-    </div>
-  </footer>
-
-  <script src="utils.js"></script>
-  <script src="article-data.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+<body>
+<div class="world-tree-background" aria-hidden="true">
+  <div class="world-tree-scene"></div>
+  <div class="world-tree-canopy"></div>
+  <div class="world-tree-aura"></div>
+  <div class="world-tree-mist mist-near"></div>
+  <div class="world-tree-mist mist-far"></div>
+  <div class="world-tree-veil"></div>
+</div>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<div id="progressBar" class="reading-progress" aria-hidden="true"></div>
+<header class="site-header"><div class="header-drapes" aria-hidden="true"><i></i><i></i><i></i></div><div class="header-frame" aria-hidden="true"><i class="header-vine vine-top"></i><i class="header-vine vine-bottom"></i><i class="header-rune rune-left"></i><i class="header-rune rune-right"></i><i class="header-glimmer"></i></div><div class="shell header-inner">
+<a class="brand" href="#home" aria-label="片片公子首页"><span class="brand-mark" aria-hidden="true">片</span><span>片片公子<small>PIANPIAN’S JOURNAL</small></span></a>
+<nav aria-label="主导航" id="primaryNav"><a href="#home" data-page="home">林间首页</a><a href="#categories" data-page="categories">翠叶藏书</a><a href="#archive" data-page="archive">时光年轮</a><a href="#about" data-page="about">关于旅人</a><a href="#contact" data-page="contact">风之信使</a></nav>
+<div class="header-actions"><span class="hanging-control pendant-leaf"><button class="icon-button pendant-button" id="atmosphereToggle" aria-label="关闭森林动效" aria-pressed="true" title="关闭森林动效"><span data-icon="leaf"></span></button></span><span class="hanging-control pendant-theme"><button class="icon-button pendant-button" id="themeToggle" aria-label="切换主题" title="切换明暗主题"><span data-icon="sun"></span></button></span><button class="icon-button menu-toggle" id="menuToggle" aria-label="打开导航" aria-controls="primaryNav" aria-expanded="false"><span data-icon="menu"></span></button></div>
+</div></header>
+<main id="main-content" tabindex="-1">
+<section class="page" id="page-home">
+<div class="shell hero">
+<div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> PIXEL FOREST / 像素森林手记</p><h1>在代码的森林里，<br>拾起<span>生活的微光。</span></h1><p class="hero-description">你好，我是片片公子。<br>一位漫步在技术森林中的旅人，在这里记录探索，<br class="desktop-break">分享热爱，也让思绪慢慢生长。</p><div class="hero-actions"><a class="button primary" href="#journal">翻开手记 <span data-icon="arrow"></span></a><a class="text-link" href="#about">认识这位旅人 <span>↗</span></a></div><div class="hero-footnote"><span class="fine-rule"></span> 记录 · 分享 · 沉淀 <span class="mono">EST. 2025</span></div></div>
+<div class="forest-frame" role="img" aria-label="世界精灵树，枝叶随风摇曳"><div class="forest-shade"></div><div class="forest-caption"><span class="mono">FIELD NOTES / 001</span><p>万物于此，静静生长。</p><span>每一片叶子，都有自己的故事</span><button class="tree-awaken" id="summonSpirit" type="button"><span aria-hidden="true">✦</span> 唤醒树灵 <span aria-hidden="true">↗</span></button></div><span class="image-label">ANCIENT TREE · 像素古树</span><div class="motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
+</div>
+<div class="shell forest-waypoints" aria-label="森林路标">
+  <span class="waypoint-label"><i aria-hidden="true"></i> 林间路标</span>
+  <a href="#categories">01 <span>探索藏书</span> ↗</a>
+  <a href="#archive">02 <span>回望年轮</span> ↗</a>
+  <a href="#contact">03 <span>寄一封信</span> ↗</a>
+</div>
+<div class="shell journal-layout" id="journal">
+<section class="journal-main" aria-labelledby="journalTitle"><div class="section-heading"><div><p class="eyebrow">THE JOURNAL</p><h2 id="journalTitle">新落下的篇章<span id="articleCount" class="count"></span></h2></div><a class="text-link" href="#archive">全部归档 <span>↗</span></a></div>
+<div class="journal-toolbar"><div id="filterTags" class="filters" aria-label="文章分类"></div><label class="search-box"><span data-icon="search"></span><input id="searchInput" type="search" placeholder="寻找一片灵感…" aria-label="搜索文章"><kbd>/</kbd></label></div><div id="articlesContainer"></div><p id="searchStatus" class="sr-only" role="status"></p>
+<div class="journal-end"><span></span><p>故事还在生长，下一篇见。</p><span></span></div></section>
+<aside class="sidebar"><section class="profile-card"><div class="profile-top"><img src="avatar.webp" width="56" height="56" alt="片片公子的头像"><span class="mono">THE WANDERER</span></div><h2>片片公子 <span class="status-dot"></span></h2><p>对代码保持好奇，<br>对生活保持热爱。</p><a class="text-link" href="#about">更多关于我 <span>↗</span></a><div class="profile-bottom"><span data-icon="pin"></span> 艾尔泽森林 · 翠叶谷</div></section><section class="aside-note"><p class="eyebrow">LEAVE A LITTLE TRACE</p><p>不必赶路，<br>偶尔也听听风。</p><a href="feed.xml" class="text-link"><span data-icon="rss"></span> 订阅我的更新 ↗</a></section></aside>
+</div></section>
+<section class="page shell inner-page" id="page-categories" hidden><div class="page-heading"><p class="eyebrow">THE COLLECTION</p><h1>翠叶藏书</h1><p>把探索过的路，写成可以重走的地图。</p></div><div id="collections"></div></section>
+<section class="page shell inner-page" id="page-archive" hidden><div class="page-heading"><p class="eyebrow">THROUGH THE YEARS</p><h1>时光年轮</h1><p>每一次记录，都是成长留下的纹理。</p></div><div id="timelineContainer" class="timeline"></div></section>
+<section class="page shell inner-page" id="page-about" hidden><div class="page-heading"><p class="eyebrow">MEET THE WANDERER</p><h1>关于这位旅人</h1><p>在技术的森林里，留下一点自己的足迹。</p></div><div class="about-layout"><img src="avatar.webp" width="240" height="240" alt="片片公子" class="about-avatar"><div class="prose"><h2>你好，我是片片公子。</h2><p>一位漫步在技术森林中的精灵旅人。热爱探索代码的奥秘，偶尔在月光下书写感悟。</p><p>这里收集我的技术学习、开发笔记与生活感悟。从搭建一个属于朋友们的 Minecraft 世界开始，把实践里遇到的问题、找到的答案，都慢慢写下来。</p><blockquote>记录，是为了给未来的自己留一条路。</blockquote><a href="#categories" class="button primary">看看我的探索 <span data-icon="arrow"></span></a></div></div></section>
+<section class="page shell inner-page" id="page-contact" hidden><div class="page-heading"><p class="eyebrow">LET THE WIND CARRY IT</p><h1>风之信使</h1><p>关于技术、游戏，或者一个有趣的想法，欢迎来聊。</p></div><div class="contact-panel"><span class="contact-symbol" data-icon="mail"></span><p class="eyebrow">一起聊聊</p><h2>让灵感，在交流中生长。</h2><p>QQ <span class="mono">1240778501</span></p><div class="hero-actions"><a href="tencent://message/?uin=1240778501" class="button primary">通过 QQ 联系 <span data-icon="arrow"></span></a><button class="button secondary" id="copyQQ">复制 QQ 号码</button></div><small>会调用本机 QQ；也可以复制号码手动添加。</small></div></section>
+<section class="page shell inner-page article-page" id="page-article" hidden><a href="#home" class="text-link article-back">← 返回林间首页</a><div id="articleDetail"></div></section>
+<section class="page shell inner-page" id="page-not-found" hidden><div class="page-heading"><p class="eyebrow">A PATH LESS TRAVELED</p><h1>这片叶子暂时不在这里。</h1><p>地址可能有误，回到首页继续探索吧。</p><a class="button primary" href="#home">回到首页</a></div></section>
+</main>
+<footer class="site-footer shell"><a class="footer-brand" href="#home">片片公子<span>在翠叶间，静听代码低语。</span></a><div><a href="feed.xml">RSS 订阅 ↗</a><p>© <span id="year">2026</span> PianPian · 慢慢记录，好好生活</p></div></footer>
+<button id="backToTop" class="icon-button back-top" aria-label="返回顶部" hidden><span data-icon="up"></span></button><div id="toast" class="toast" role="status"></div>
+<noscript><p class="noscript">请启用 JavaScript 以浏览文章、搜索和切换页面。你也可以<a href="feed.xml">阅读 RSS 订阅</a>。</p></noscript>
+</body></html>

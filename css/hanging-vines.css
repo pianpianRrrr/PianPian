@@ -1,0 +1,133 @@
+/* Trailing leaves grow beyond the frames; decorations never capture input. */
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption) { overflow: visible; }
+:is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before {
+  width: 64px;
+  height: 112px;
+  inset: -3px auto auto -13px;
+  background: url('../assets/pixel-vine-drape.svg') left top / 34px 90px no-repeat,
+              url('../assets/pixel-vine-corner.svg') 11px 2px / 52px 52px no-repeat;
+  transform-origin: 24px 3px;
+  animation: hanging-frond 6s ease-in-out infinite alternate;
+}
+:is(.article-card,.aside-note,.forest-caption)::before { height: 88px; background-size: 30px 72px,52px 52px; animation-delay: -2s; }
+.header-drapes { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.header-drapes i { position: absolute; top: calc(100% - 8px); width: 32px; height: 68px; background: url('../assets/pixel-vine-drape.svg') center / 100% 100% no-repeat; image-rendering: pixelated; transform-origin: 70% 0; animation: hanging-frond 6s ease-in-out infinite alternate; }
+.header-drapes i:nth-child(1) { left: 1px; }
+.header-drapes i:nth-child(2) { left: 38%; height: 42px; width: 25px; animation-delay: -2s; }
+.header-drapes i:nth-child(3) { right: 8px; height: 54px; animation-delay: -4s; }
+.header-actions { height: 100%; align-items: flex-start; gap: 16px; }
+.hanging-control {
+  --cord-length: 35px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 46px;
+  width: 46px;
+  padding-top: var(--cord-length);
+  transform-origin: 50% 0;
+  animation: pendant-sway 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.hanging-control::before {
+  content: '';
+  position: absolute;
+  width: 27px;
+  height: calc(var(--cord-length) + 3px);
+  top: 0;
+  left: calc(50% - 13px);
+  background: url('../assets/pixel-vine-cord.svg') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.pendant-theme { --cord-length: 48px; animation-delay: -3.5s; animation-duration: 8s; }
+.header-actions .pendant-button {
+  position: relative;
+  pointer-events: auto;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  color: #d9e7ac;
+  background: #213f30;
+  border: 2px solid #92ad6b;
+  border-radius: 9px 3px 9px 3px;
+  box-shadow: 3px 4px 0 #0b211a, inset 0 0 0 3px #2e5138, inset 0 0 0 4px #63834e;
+}
+.header-actions .pendant-button::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 6px;
+  border: 2px solid #b7b578;
+  background: #1a3827;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.header-actions .pendant-button::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  background: #c8da8e;
+  box-shadow: -4px -2px 0 #819f5f, 2px -3px 0 #819f5f;
+  pointer-events: none;
+}
+#themeToggle.pendant-button { color: #f0d28e; border-color: #b5a671; background: #343e29; box-shadow: 3px 4px 0 #14271b, inset 0 0 0 3px #465135, inset 0 0 0 4px #93895d; }
+[data-theme="light"] .header-actions .pendant-button { background: #dce5bb; color: #345330; border-color: #70874c; box-shadow: 3px 4px 0 #a3b181, inset 0 0 0 3px #eff0d1, inset 0 0 0 4px #91a76c; }
+[data-theme="light"] #themeToggle.pendant-button { color: #624b27; background: #eadba8; border-color: #9a8654; box-shadow: 3px 4px 0 #aea17c, inset 0 0 0 3px #f4ecc9, inset 0 0 0 4px #b9a66d; }
+.header-actions .menu-toggle { align-self: center; }
+.hanging-control:focus-within { animation-play-state: paused; }
+@media(hover:hover) {
+  .hanging-control:hover { animation-play-state: paused; }
+  .header-actions .pendant-button:not(:disabled):hover { transform: translateY(2px); border-color: #e1e8a5; box-shadow: 2px 2px 0 var(--pixel-shadow),inset 0 0 0 3px #63834e; }
+  .header-actions .pendant-button:not(:disabled):active { transform: translateY(4px); }
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption):hover::before { animation-duration: 6s; }
+}
+@keyframes hanging-frond { from { transform: rotate(-3deg); } to { transform: rotate(4deg); } }
+@keyframes pendant-sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+.atmosphere-off .hanging-control,.atmosphere-off .header-drapes i { animation: none; }
+@media(max-width:850px) {
+  .header-actions { gap: 12px; }
+  .hanging-control { --cord-length: 23px; }
+  .pendant-theme { --cord-length: 32px; }
+}
+@media(max-width:640px) {
+  .header-actions { gap: 6px; }
+  .hanging-control { --cord-length: 24px; width: 44px; flex-basis: 44px; }
+  .pendant-theme { --cord-length: 31px; }
+  .header-actions .pendant-button { width: 44px; height: 44px; flex-basis: 44px; }
+  .header-drapes i:nth-child(2) { display: none; }
+  .header-drapes i { width: 24px; height: 48px; }
+  .header-drapes i:nth-child(3) { width: 22px; height: 38px; right: 2px; }
+  :is(.journal-main,.inner-page,.profile-card,.article-card,.contact-panel,.aside-note,.forest-caption)::before {
+    left: -9px; width: 48px; height: 76px;
+    background-size: 24px 65px,40px 40px;
+    background-position: left top,7px 2px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .hanging-control,.header-drapes i { animation: none !important; }
+}
+
+.header-drapes { clip-path: inset(0 0 -90px 0); }
+
+/* Attach both cords to the LOWER navigation trim, outside the header. */
+.header-actions { position: relative; min-width: 108px; }
+.hanging-control { position: absolute; top: calc(100% - 6px); }
+.pendant-leaf { right: 62px; --cord-length: 22px; }
+.pendant-theme { right: 0; --cord-length: 34px; }
+@media(max-width:850px) {
+  .pendant-leaf { --cord-length: 18px; }
+  .pendant-theme { --cord-length: 28px; }
+}
+@media(max-width:640px) {
+  .header-actions { min-width: 44px; width: 44px; justify-content: flex-end; }
+  .pendant-leaf { right: 58px; --cord-length: 16px; }
+  .pendant-theme { right: 2px; --cord-length: 26px; }
+  .hero { padding-top: 96px; }
+  .inner-page { margin-top: 84px; }
+  /* An expanded menu occupies the same space, so hide pendants while it is open. */
+  .site-header:has(#primaryNav.open) .hanging-control { visibility: hidden; }
+}
