@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.pianpian123.top/</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.pianpian123.top/article-detail.html?id=mc-server</loc>
+    <priority>0.8</priority>
+  </url>
+  <!--
+  <url>
+    <loc>https://www.pianpian123.top/article-detail.html?id=js-async</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.pianpian123.top/article-detail.html?id=learning-path</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.pianpian123.top/article-detail.html?id=git-workflow</loc>
+    <priority>0.8</priority>
+  </url>
+  -->
+</urlset>
